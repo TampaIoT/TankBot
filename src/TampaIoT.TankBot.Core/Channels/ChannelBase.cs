@@ -11,6 +11,9 @@ using TampaIoT.TankBot.Core.Models;
 
 namespace TampaIoT.TankBot.Core.Channels
 {
+    /// <summary>
+    /// Channel is a mechansim that can be used to communicate with a TankBot
+    /// </summary>
     public abstract class ChannelBase : IChannel, INotifyPropertyChanged
     {
         public event EventHandler<IChannel> Connected;

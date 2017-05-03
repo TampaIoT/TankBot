@@ -16,7 +16,7 @@ namespace TampaIoT.TankBot.UWP.Core.Watchers
             _logger = logger;
         }
 
-        protected override void StartWatcher()
+        public override void Start()
         {
             _logger.NotifyUserInfo("TCPIP Mgr", $"Started Watcher");
 
@@ -35,7 +35,7 @@ namespace TampaIoT.TankBot.UWP.Core.Watchers
             }
         }
 
-        protected override void StopWatcher()
+        public override void Stop()
         {
             _logger.NotifyUserInfo("TCPIP Mgr", $"Stopped Watcher");
             _ssdpClient.Cancel();

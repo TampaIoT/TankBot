@@ -92,13 +92,25 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Api\MotionRestAPI.cs" />
+    <Compile Include="Api\MotionController.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Channels\Client.cs" />
+    <Compile Include="Channels\Server.cs" />
+    <Compile Include="Channels\TCPListener.cs" />
+    <Compile Include="Filters\MedianFilter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Managers\ConnectionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sensors\Compass5983.cs" />
+    <Compile Include="Sensors\IRSensor.cs" />
+    <Compile Include="Sensors\IRSensorArray.cs" />
+    <Compile Include="Sensors\SensorManager.cs" />
+    <Compile Include="Sensors\Sonar.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

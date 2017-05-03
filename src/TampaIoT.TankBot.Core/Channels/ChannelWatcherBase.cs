@@ -10,6 +10,9 @@ using TampaIoT.TankBot.Core.Interfaces;
 
 namespace TampaIoT.TankBot.Core.Channels
 {
+    /// <summary>
+    /// Channel Watcher is a Mechansim that can be used to search for channels/TankBots
+    /// </summary>
     public abstract class ChannelWatcherBase : IChannelWatcher
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -25,10 +28,6 @@ namespace TampaIoT.TankBot.Core.Channels
         public ChannelWatcherBase(ITankBotLogger logger)
         {
             _logger = logger;
-
-            StartWatcherCommand = RelayCommand.Create(StartWatcher);
-            StopWatcherCommand = RelayCommand.Create(StopWatcher);
-            StopWatcherCommand.Enabled = false;
         }
 
         public void RaiseDeviceFoundEvent(IChannel channel)
@@ -56,12 +55,8 @@ namespace TampaIoT.TankBot.Core.Channels
             Services.DispatcherServices.Invoke(() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)));
         }
 
-        protected abstract void StartWatcher();
-        protected abstract void StopWatcher();
-
-        public RelayCommand StartWatcherCommand { get; private set; }
-        public RelayCommand StopWatcherCommand { get; private set; }
-
+        public abstract void Start();
+        public abstract void Stop();
         public ObservableCollection<IChannel> Channels { get; private set; }
     }
 }

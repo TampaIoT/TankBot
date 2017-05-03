@@ -55,6 +55,8 @@ namespace TampaIoT.TankBot.App
                     //TODO: Load state from previously suspended application
                 }
 
+                LagoVista.Core.UWP.Services.UWPDeviceServices.Init(rootFrame.Dispatcher);
+
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
             }

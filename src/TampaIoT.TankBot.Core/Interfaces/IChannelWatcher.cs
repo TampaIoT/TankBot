@@ -21,7 +21,7 @@ namespace TampaIoT.TankBot.Core.Interfaces
 
         ObservableCollection<IChannel> Channels { get; }
 
-        RelayCommand StartWatcherCommand { get; }
-        RelayCommand StopWatcherCommand { get; }
+        void Start();
+        void Stop();
     }
 }

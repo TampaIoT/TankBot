@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace TampaIoT.TankBot.Firmware
@@ -22,6 +12,8 @@ namespace TampaIoT.TankBot.Firmware
     /// </summary>
     sealed partial class App : Application
     {
+        private static App _app;
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -30,7 +22,17 @@ namespace TampaIoT.TankBot.Firmware
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            _app = this;
         }
+
+        public static App TheApp { get { return _app; } }
+
+        public bool HasInternetConnection { get; set; }
+
+        public bool HasMBotConnection { get; set; }
+
+        public bool ConnectedToCloud { get; set; }
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
