@@ -1,4 +1,4 @@
-﻿<Page
+﻿<Page xmlns:my1="using:TampaIoT.TankBot.App.Controls"  xmlns:my="using:TampaIoT.TankBot.UWP.Core.Controls" 
     x:Class="TampaIoT.TankBot.App.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -9,10 +9,7 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
-        <Grid.Resources>
-            <vms:MainViewModel x:Name="ViewModel" />
-        </Grid.Resources>
-        <Grid  DataContext="{StaticResource ViewModel}">
+        <Grid >
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
@@ -21,15 +18,28 @@
                 <AppBarButton Icon="Add" Command="{Binding TogglePaneVisibilityCommand}">
                 </AppBarButton>
             </CommandBar>
-            <SplitView IsPaneOpen="{Binding IsPaneOpen}">
+            <SplitView IsPaneOpen="{Binding IsPaneOpen}" Grid.Row="1">
                 <SplitView.Content>
                     <Grid>
-                        
+                        <TextBlock Text="{Binding CurrentChannel.DeviceName}" />
+                        <my:Movement />
+                        <my:Compass />
+                        <my:SensorArray />
+                        <my:Sonar />
+                        <my1:JoyStick />
                     </Grid>
                 </SplitView.Content>
                 <SplitView.Pane>
                     <Grid>
-        
+                        <ListView SelectedItem="{Binding CurrentChannel, Mode=TwoWay}" ItemsSource="{Binding Path=SearchVM.AvailableChannels}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <TextBlock Text="{Binding DeviceName}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </Grid>
                 </SplitView.Pane>
             </SplitView>

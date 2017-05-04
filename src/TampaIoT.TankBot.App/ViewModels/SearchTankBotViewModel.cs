@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TampaIoT.TankBot.Core.Interfaces;
 using TampaIoT.TankBot.Core.Models;
+using TampaIoT.TankBot.UWP.Core.Watchers;
 
 namespace TampaIoT.TankBot.App.ViewModels
 {
@@ -23,6 +24,8 @@ namespace TampaIoT.TankBot.App.ViewModels
 
             StartSearchingCommand = new RelayCommand(StartSearching);
             StopSearchingCommand = new RelayCommand(StopSearching);
+
+            RegisterChannelWatcher(new FakeWatcher(App.TheApp.Logger));
         }
 
         public void RegisterChannelWatcher(IChannelWatcher channelWatcher)

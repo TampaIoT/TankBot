@@ -107,23 +107,43 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Channels\BluetoothChannel.cs" />
+    <Compile Include="Channels\FakeChannel.cs" />
     <Compile Include="Channels\SerialPortChannel.cs" />
     <Compile Include="Channels\TCPIPChannel.cs" />
+    <Compile Include="Controls\Compass.xaml.cs">
+      <DependentUpon>Compass.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Movement.xaml.cs">
+      <DependentUpon>Movement.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SensorArray.xaml.cs">
+      <DependentUpon>SensorArray.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Sonar.xaml.cs">
+      <DependentUpon>Sonar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\TankBotLogger.cs" />
     <Compile Include="Watchers\BluetoothChannelWatcher.cs" />
+    <Compile Include="Watchers\FakeWatcher.cs" />
     <Compile Include="Watchers\UPNPChannelWatcher.cs" />
     <EmbeddedResource Include="Properties\TampaIoT.TankBot.UWP.Core.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FontAwesome.UWP">
+      <Version>4.7.0.9</Version>
+    </PackageReference>
     <PackageReference Include="LagoVista.Core">
-      <Version>0.8.123-alpha01157</Version>
+      <Version>0.8.154-alpha00582</Version>
     </PackageReference>
     <PackageReference Include="LagoVista.Core.Networking">
-      <Version>0.8.123-alpha01157</Version>
+      <Version>0.8.154-alpha00582</Version>
+    </PackageReference>
+    <PackageReference Include="LagoVista.Core.UWP">
+      <Version>0.8.154-alpha00347</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>5.3.2</Version>
+      <Version>5.3.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -132,7 +152,24 @@
       <Name>TampaIoT.TankBot.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Controls\Compass.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Movement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SensorArray.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Sonar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

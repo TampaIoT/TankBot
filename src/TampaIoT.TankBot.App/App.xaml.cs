@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TampaIoT.TankBot.Core.Interfaces;
+using TampaIoT.TankBot.UWP.Core.Utilities;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -22,6 +25,8 @@ namespace TampaIoT.TankBot.App
     /// </summary>
     sealed partial class App : Application
     {
+        public static App _theApp;
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -30,7 +35,23 @@ namespace TampaIoT.TankBot.App
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            Logger = new TankBotLogger();
+            _theApp = this;
+
+            UnhandledException += (sender, e) =>
+            {
+                if (global::System.Diagnostics.Debugger.IsAttached)
+                {
+                    Debug.WriteLine("Unhandled Exception");
+                    Debug.WriteLine(e.Exception.Message);
+                    Debug.Write(e.Exception.StackTrace);
+                }
+            };
         }
+
+        public ITankBotLogger Logger { get; private set; }
+
+        public static App TheApp { get { return _theApp; } }
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points

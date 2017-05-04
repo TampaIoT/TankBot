@@ -5,7 +5,7 @@ using TampaIoT.TankBot.Core.Models;
 
 namespace TampaIoT.TankBot.UWP.Core.Utilities
 {
-    class TankBotLogger : ITankBotLogger
+    public class TankBotLogger : ITankBotLogger
     {
         public ObservableCollection<Notification> Notifications { get; private set; }
 

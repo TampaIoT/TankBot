@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TampaIoT.TankBot.App</RootNamespace>
     <AssemblyName>TampaIoT.TankBot.App</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
+    <DefaultLanguage>en</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.14393.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
@@ -68,7 +68,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE;WINDOWS_UWP;CODE_ANALYSIS;DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -96,6 +96,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controllers\XBoxController.cs" />
+    <Compile Include="Controls\JoyStick.xaml.cs">
+      <DependentUpon>JoyStick.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -124,26 +127,45 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\JoyStick.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FontAwesome.UWP">
+      <Version>4.7.0.9</Version>
+    </PackageReference>
     <PackageReference Include="LagoVista.Core">
-      <Version>0.8.123-alpha01157</Version>
+      <Version>0.8.154-alpha00582</Version>
     </PackageReference>
     <PackageReference Include="LagoVista.Core.UWP">
-      <Version>0.8.69-alpha01115</Version>
+      <Version>0.8.154-alpha00347</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>5.3.2</Version>
+      <Version>5.3.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TampaIoT.TankBot.Cloud\TampaIoT.TankBot.Cloud.csproj">
+      <Project>{8ae7e785-98a8-4c33-ae6d-804391520098}</Project>
+      <Name>TampaIoT.TankBot.Cloud</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TampaIoT.TankBot.Core\TampaIoT.TankBot.Core.csproj">
       <Project>{66ca690d-c956-4700-9b53-9505fcc4cdfb}</Project>
       <Name>TampaIoT.TankBot.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TampaIoT.TankBot.mBot\TampaIoT.TankBot.mBot.csproj">
+      <Project>{c4492e42-7814-412e-bb17-d8a84532e3fa}</Project>
+      <Name>TampaIoT.TankBot.mBot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TampaIoT.TankBot.UWP.Core\TampaIoT.TankBot.UWP.Core.csproj">
+      <Project>{865c01fb-eb08-46b6-bf78-f57750bf7cf0}</Project>
+      <Name>TampaIoT.TankBot.UWP.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
