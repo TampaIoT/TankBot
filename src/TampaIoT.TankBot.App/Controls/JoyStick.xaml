@@ -5,11 +5,15 @@
     xmlns:local="using:TampaIoT.TankBot.App.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:fa="using:FontAwesome.UWP"
     mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignHeight="200"
+    d:DesignWidth="200">
 
-    <Grid>
-
-    </Grid>
+    <Canvas Width="200" Height="200">
+        <Line X1="0" X2="200" Y1="100" Y2="100" Stroke="Blue" StrokeThickness="3" />
+        <Line X1="100" X2="100" Y1="00" Y2="200" Stroke="Blue" StrokeThickness="3" />
+        <fa:FontAwesome  Icon="Circle" Canvas.Left="100" Canvas.Top="100" Margin="-15" />
+        
+    </Canvas>
 </UserControl>

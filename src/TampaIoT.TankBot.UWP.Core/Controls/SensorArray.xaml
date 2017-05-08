@@ -5,15 +5,20 @@
     xmlns:local="using:TampaIoT.TankBot.UWP.Core.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+     xmlns:fa="using:FontAwesome.UWP"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="300">
 
     <Grid>
         <Grid.Resources>
-            <Style TargetType="Button">
+            <Style TargetType="fa:FontAwesome">
                 <Setter Property="HorizontalAlignment" Value="Center" />
                 <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Width" Value="64" />
+                <Setter Property="Height" Value="64" />
+                <Setter Property="Foreground" Value="Green" />
+
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
@@ -26,14 +31,32 @@
             <ColumnDefinition Width="33*" />
             <ColumnDefinition Width="33*" />
         </Grid.ColumnDefinitions>
-        <Image />
-        <Image Grid.Row="1" />
-        <Image Grid.Row="2" />
-        <Image Grid.Column="1" Grid.Row="0" />
-        <Image Grid.Column="1" Grid.Row="1" />
-        <Image Grid.Column="1" Grid.Row="2" />
-        <Image Grid.Column="2" Grid.Row="0" />
-        <Image Grid.Column="2" Grid.Row="1" />
-        <Image Grid.Column="2" Grid.Row="2" />
+
+        <fa:FontAwesome Icon="ChevronCircleLeft" FontSize="64" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+            <fa:FontAwesome.RenderTransform>
+                <RotateTransform Angle="45" CenterX="32" CenterY="32" />
+            </fa:FontAwesome.RenderTransform>
+        </fa:FontAwesome>
+        <fa:FontAwesome Icon="ChevronCircleLeft" FontSize="64" Grid.Row="1" />
+
+        <fa:FontAwesome Icon="ChevronCircleLeft" FontSize="64" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="2" >
+            <fa:FontAwesome.RenderTransform>
+                <RotateTransform Angle="-45" CenterX="32" CenterY="32" />
+            </fa:FontAwesome.RenderTransform>
+        </fa:FontAwesome>
+
+        <fa:FontAwesome FontSize="64" Grid.Column="1" Grid.Row="0" Icon="ChevronCircleUp" />
+        <fa:FontAwesome FontSize="64" Icon="ChevronCircleDown" Grid.Column="1" Grid.Row="2" />
+        <fa:FontAwesome  FontSize="64" HorizontalAlignment="Left" VerticalAlignment="Bottom" Icon="ChevronCircleUp" Grid.Column="2" Grid.Row="0" >
+            <fa:FontAwesome.RenderTransform>
+                <RotateTransform Angle="45" CenterX="32" CenterY="32" />
+            </fa:FontAwesome.RenderTransform>
+        </fa:FontAwesome>
+        <fa:FontAwesome  FontSize="64" Icon="ChevronCircleRight" Grid.Column="2" Grid.Row="1" />
+        <fa:FontAwesome  FontSize="64" Icon="ChevronCircleRight" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <fa:FontAwesome.RenderTransform>
+                <RotateTransform Angle="45" CenterX="32" CenterY="32" />
+            </fa:FontAwesome.RenderTransform>
+        </fa:FontAwesome>
     </Grid>
 </UserControl>

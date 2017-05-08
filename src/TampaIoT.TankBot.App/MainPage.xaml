@@ -21,12 +21,23 @@
             <SplitView IsPaneOpen="{Binding IsPaneOpen}" Grid.Row="1">
                 <SplitView.Content>
                     <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding CurrentChannel.DeviceName}" />
-                        <my:Movement />
-                        <my:Compass />
-                        <my:SensorArray />
-                        <my:Sonar />
-                        <my1:JoyStick />
+                        <my:Movement Width="300" Height="300" />
+                        <my:Compass Grid.Column="1" />
+                        <my:SensorArray Grid.Row="1" Width="300" Height="300" />
+                        <my:Sonar Grid.Row="1" Grid.Column="1" />
+                        <my1:JoyStick Grid.Row="2" Grid.ColumnSpan="2" />
                     </Grid>
                 </SplitView.Content>
                 <SplitView.Pane>

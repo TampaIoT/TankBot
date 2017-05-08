@@ -5,16 +5,22 @@
     xmlns:local="using:TampaIoT.TankBot.UWP.Core.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:fa="http://schemas.fontawesome.io/icons/"
-    mc:Ignorable="d"
+    xmlns:fa="using:FontAwesome.UWP"
+     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="300">
 
 
-    <Grid>
+    <Grid  Background="White">
         <Grid.Resources>
             <Style TargetType="Button">
                 <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Width" Value="64" />
+                <Setter Property="FontSize" Value="64" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="Red" />
+                <Setter Property="Height" Value="64" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
         </Grid.Resources>
@@ -28,15 +34,60 @@
             <ColumnDefinition Width="33*" />
             <ColumnDefinition Width="33*" />
         </Grid.ColumnDefinitions>
-        <Button  Command="{Binding MoveCommand}" CommandParameter="315" >
+        <Button  Command="{Binding MoveCommand}" CommandParameter="315"  >
+            <Button.Content>
+                <fa:FontAwesome FontSize="48"   Icon="ArrowCircleLeft" />
+            </Button.Content>
+            <Button.RenderTransform>
+                <RotateTransform Angle="45" CenterX="32" CenterY="32" />
+            </Button.RenderTransform>
         </Button>
-        <Button  Grid.Row="1"  Command="{Binding MoveCommand}" CommandParameter="270" />
-        <Button Grid.Row="2"  Command="{Binding MoveCommand}" CommandParameter="235" />
-        <Button Grid.Column="1" Grid.Row="0" Command="{Binding MoveCommand}" CommandParameter="0" />
-        <Button Grid.Column="1" Grid.Row="1" Command="{Binding MoveCommand}" CommandParameter="Stop" />
-        <Button Grid.Column="1" Grid.Row="2" Command="{Binding MoveCommand}" CommandParameter="180" />
-        <Button Grid.Column="2" Grid.Row="0" Command="{Binding MoveCommand}" CommandParameter="45" />
-        <Button Grid.Column="2" Grid.Row="1" Command="{Binding MoveCommand}" CommandParameter="90" />
-        <Button Grid.Column="2" Grid.Row="2" Command="{Binding MoveCommand}" CommandParameter="135"/>
+        <Button  Grid.Row="1"  Command="{Binding MoveCommand}" CommandParameter="270" >
+            <Button.Content>
+                <fa:FontAwesome FontSize="48" Icon="ArrowCircleLeft"/>
+            </Button.Content>
+        </Button>
+        <Button Grid.Row="2"  Command="{Binding MoveCommand}" CommandParameter="235"     >
+            <Button.Content>
+                <fa:FontAwesome FontSize="48"  Icon="ArrowCircleLeft"/>
+            </Button.Content>
+        </Button>
+
+        <Button Grid.Column="1" Grid.Row="0" Command="{Binding MoveCommand}" CommandParameter="0" >
+            <Button.Content>
+                <fa:FontAwesome FontSize="48"  Icon="ArrowCircleUp"/>
+            </Button.Content>
+        </Button>
+        <Button Grid.Column="1" Grid.Row="1" Command="{Binding MoveCommand}" CommandParameter="Stop" >
+            <Button.Content>
+                <fa:FontAwesome FontSize="48"    Icon="StopCircleOutline"/>
+            </Button.Content>
+        </Button>
+        <Button Grid.Column="1" Grid.Row="2" Command="{Binding MoveCommand}" CommandParameter="180" >
+            <Button.Content>
+                <fa:FontAwesome  FontSize="48"   Icon="ArrowCircleDown"/>
+            </Button.Content>
+        </Button>
+        <Button Grid.Column="2" Grid.Row="0" Command="{Binding MoveCommand}" CommandParameter="45" >
+            <Button.Content>
+                <fa:FontAwesome FontSize="48" Icon="ArrowCircleUp"/>
+            </Button.Content>
+            <Button.RenderTransform>
+                <RotateTransform Angle="45" CenterX="32" CenterY="32" />
+            </Button.RenderTransform>
+        </Button>
+        <Button Grid.Column="2" Grid.Row="1" Command="{Binding MoveCommand}" CommandParameter="90" >
+            <Button.Content>
+                <fa:FontAwesome FontSize="48" Icon="ArrowCircleRight"/>
+            </Button.Content>
+        </Button>
+        <Button Grid.Column="2" Grid.Row="2" Command="{Binding MoveCommand}" CommandParameter="135">
+            <Button.Content>
+                <fa:FontAwesome FontSize="48" Icon="ArrowCircleRight"/>
+            </Button.Content>
+            <Button.RenderTransform>
+                <RotateTransform Angle="45" CenterX="32" CenterY="32" />
+            </Button.RenderTransform>
+        </Button>
     </Grid>
 </UserControl>
