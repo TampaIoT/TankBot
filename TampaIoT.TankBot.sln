@@ -13,6 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TampaIoT.TankBot.mBot", "sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{1FFDA824-EB5E-4EBD-91E1-F48A2E6BB8EF}"
 	ProjectSection(SolutionItems) = preProject
+		CommunicationsChannel.md = CommunicationsChannel.md
 		Documentation\ProjectStructure.md = Documentation\ProjectStructure.md
 		README.md = README.md
 	EndProjectSection

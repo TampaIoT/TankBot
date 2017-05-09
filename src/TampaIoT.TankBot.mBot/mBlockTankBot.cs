@@ -20,16 +20,13 @@ namespace TampaIoT.TankBot
         IChannel _channel;
         ITankBotLogger _logger;
         mBlockIncomingMessage _currentIncomingMessage;
+        DateTime _start;
+        string _pin;
+        Timer _timer;
+        bool _connectedToBot;
 
         public ObservableCollection<mBlockIncomingMessage> IncomingMessages { get; private set; }
         public ObservableCollection<mBlockOutgoingMessage> OutgoingMessages { get; private set; }
-
-        DateTime _start;
-
-        string _pin;
-
-        Timer _timer;
-        bool _connectedToBot;
 
         public mBlockSoccerBot(IChannel channel, ITankBotLogger logger, string pin = "9999") : this()
         {
@@ -124,7 +121,6 @@ namespace TampaIoT.TankBot
                 {
 
                     IncomingMessages.Add(_currentIncomingMessage);
-                    //     Debug.WriteLine(String.Format("{0:000000} <<<", (DateTime.Now - _start).TotalMilliseconds) + _currentIncomingMessage.MessageHexString);
                     _logger.NotifyUserInfo("mBlock", "<<< " + _currentIncomingMessage.MessageHexString);
 
                     if (_currentIncomingMessage.BufferSize > 4)
@@ -145,7 +141,7 @@ namespace TampaIoT.TankBot
                 SendCommand(CurrentState);
             }
         }
-
+  
 
         private async void SendMessage(mBlockOutgoingMessage msg)
         {
@@ -160,7 +156,6 @@ namespace TampaIoT.TankBot
             try
             {
                 OutgoingMessages.Add(msg);
-                //                Debug.WriteLine(String.Format("{0:000000} >>>", (DateTime.Now - _start).TotalMilliseconds) + msg.MessageHexString);
                 _logger.NotifyUserInfo("mBlock", ">>> " + msg.MessageHexString);
                 await _channel.WriteBuffer(msg.Buffer);
             }
@@ -279,7 +274,6 @@ namespace TampaIoT.TankBot
                 this.LastBotContact = DateTime.Now;
 
                 _connectedToBot = true;
-
             }
         }
 
@@ -351,8 +345,7 @@ namespace TampaIoT.TankBot
             var rgbMessage = mBlockOutgoingMessage.CreateMessage(mBlockOutgoingMessage.CommandTypes.Run, mBlockOutgoingMessage.Devices.RGBLED, 0, payload);
             SendMessage(rgbMessage);
         }
-
-
+        
         public void SetRGBA1sync(byte r, byte g, byte b)
         {
             var payload = new byte[3] { r, g, b };
@@ -365,9 +358,8 @@ namespace TampaIoT.TankBot
             var radians = relativeHeading.Value * (Math.PI / 180);
             var x = Math.Sin(radians);
             var y = Math.Cos(radians);
-
-            //Probably a smarter way of doing this.
-
+            
+            //Filter out the "dead-zone" of the joystick
             if (Math.Abs(y) < 0.1) y = 0;
             if (Math.Abs(x) < 0.1) x = 0;
 
@@ -378,8 +370,7 @@ namespace TampaIoT.TankBot
             if (x < 0) leftMotor = Convert.ToInt16(leftMotor * (1 - Math.Abs(x)));
 
             Debug.WriteLine($"SENDING: {x} {y}");
-
-
+            
             SendMotorPower(-leftMotor, rightMotor);
         }
 
@@ -424,7 +415,6 @@ namespace TampaIoT.TankBot
                 RaisePropertyChanged();
             }
         }
-    
         
         public SensorData SensorData { get; set; }
     }

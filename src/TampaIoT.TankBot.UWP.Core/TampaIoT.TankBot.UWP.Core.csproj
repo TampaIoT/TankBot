@@ -110,6 +110,9 @@
     <Compile Include="Channels\FakeChannel.cs" />
     <Compile Include="Channels\SerialPortChannel.cs" />
     <Compile Include="Channels\TCPIPChannel.cs" />
+    <Compile Include="Controls\BotInfo.xaml.cs">
+      <DependentUpon>BotInfo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Compass.xaml.cs">
       <DependentUpon>Compass.xaml</DependentUpon>
     </Compile>
@@ -153,6 +156,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\BotInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Compass.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
