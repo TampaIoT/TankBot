@@ -12,7 +12,7 @@ using Windows.Networking.Sockets;
 
 namespace TampaIoT.TankBot.UWP.Core.Channels
 {
-    public class TCPIPChannel : ChannelBase, IDisposable
+    public class TCPIPChannel : ChannelBase, INetworkChannel, IDisposable
     {
         uPnPDevice _remoteDevice;
 
@@ -32,6 +32,8 @@ namespace TampaIoT.TankBot.UWP.Core.Channels
         Task _listenerTask;
 
         MessageParser _parser;
+
+        public override ChannelTypes ChannelType => ChannelTypes.Local;
 
         ITankBotLogger _logger;
         public TCPIPChannel(uPnPDevice device, ITankBotLogger logger)

@@ -6,12 +6,15 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TampaIoT.TankBot.Core.Channels;
+using TampaIoT.TankBot.Core.Interfaces;
 
 namespace TampaIoT.TankBot.UWP.Core.Channels
 {
     public class FakeChannel : ChannelBase
     {
         Timer _timer;
+
+        public override ChannelTypes ChannelType => ChannelTypes.Simulated;
 
         public override void Connect()
         {
@@ -20,7 +23,7 @@ namespace TampaIoT.TankBot.UWP.Core.Channels
 
         private void SendUpdate(object state)
         {
-            this.
+            
         }
 
         public override Task<bool> ConnectAsync()

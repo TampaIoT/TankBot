@@ -95,6 +95,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\IJoyStick.cs" />
     <Compile Include="Controllers\XBoxController.cs" />
     <Compile Include="Controls\JoyStick.xaml.cs">
       <DependentUpon>JoyStick.xaml</DependentUpon>
@@ -103,9 +104,11 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\RemotClientTankBotViewModel.cs" />
+    <Compile Include="ViewModels\IClientTankBotViewModel.cs" />
+    <Compile Include="ViewModels\LocalClientTankBotViewModel.cs" />
     <Compile Include="ViewModels\SearchTankBotViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="ViewModels\TankBotViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

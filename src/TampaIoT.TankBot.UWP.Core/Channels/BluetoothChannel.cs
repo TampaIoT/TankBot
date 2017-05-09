@@ -33,6 +33,8 @@ namespace TampaIoT.TankBot.UWP.Core.Channels
             _logger.NotifyUserInfo("BT Channel", "Created");
         }
 
+        public override ChannelTypes ChannelType => ChannelTypes.Local;
+
         public override async Task<bool> ConnectAsync()
         {
             _socket = new StreamSocket();

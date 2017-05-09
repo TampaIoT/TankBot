@@ -5,11 +5,11 @@ using Windows.Devices.Gpio;
 
 namespace TampaIoT.TankBot.Firmware.Sensors
 {
-    public class IRSensor : ISensor
+    public class IRProximitySensor : ISensor
     {
         GpioPin _input;
 
-        public IRSensor(GpioController gpio, int pin)
+        public IRProximitySensor(GpioController gpio, int pin)
         {
             _input = gpio.OpenPin(pin);
             _input.SetDriveMode(GpioPinDriveMode.Input);

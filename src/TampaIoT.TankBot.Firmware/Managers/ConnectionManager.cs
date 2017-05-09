@@ -26,12 +26,6 @@ namespace TampaIoT.TankBot.Firmware.Managers
 
         static ConnectionManager _instance = new ConnectionManager();
 
-        public void Init(ITankBot soccerBot, ITankBotLogger logger)
-        {
-            _soccerBot = soccerBot;
-            _logger = logger;
-        }
-
         public string GetDefaultPageHTML(string message)
         {
             var html = @"<head>
@@ -91,8 +85,9 @@ namespace TampaIoT.TankBot.Firmware.Managers
         private int _webServerPort;
         private int _tcpListenerPort;
 
-        public void Start(String tankBotName, ITankBot tankBot, SensorManager sensorManager, int webServerPort, int tcpListenerPort)
+        public void Start(String tankBotName, ITankBot tankBot, ITankBotLogger logger, SensorManager sensorManager, int webServerPort, int tcpListenerPort)
         {
+            _logger = logger;
             _tankBotName = tankBotName;
             _tankBot = tankBot;
             _sensorManager = sensorManager;

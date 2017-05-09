@@ -12,9 +12,19 @@ namespace TampaIoT.TankBot.Core.Interfaces
         Disconnected,
     }
 
+    public enum ChannelTypes
+    {
+        Simulated,
+        Local,
+        Remote
+    }
+
+
     public interface IChannel
     {
         String Id { get; set; }
+
+        ChannelTypes ChannelType { get; }
 
         DateTime? LastMessageReceived { get; }
 

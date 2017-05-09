@@ -15,7 +15,7 @@ using TampaIoT.TankBot.Core.Messages;
 
 namespace TampaIoT.TankBot
 {
-    public class mBlockSoccerBot : TankBotBase, ITankBot, INotifyPropertyChanged
+    public class mBlockTankBot : TankBotBase, ITankBot, INotifyPropertyChanged
     {
         IChannel _channel;
         ITankBotLogger _logger;
@@ -28,7 +28,7 @@ namespace TampaIoT.TankBot
         public ObservableCollection<mBlockIncomingMessage> IncomingMessages { get; private set; }
         public ObservableCollection<mBlockOutgoingMessage> OutgoingMessages { get; private set; }
 
-        public mBlockSoccerBot(IChannel channel, ITankBotLogger logger, string pin = "9999") : this()
+        public mBlockTankBot(IChannel channel, ITankBotLogger logger, string pin = "9999") : this()
         {
             _pin = pin;
             _logger = logger;
@@ -75,7 +75,7 @@ namespace TampaIoT.TankBot
             ProcessBuffer(buffer);
         }
 
-        public mBlockSoccerBot()
+        public mBlockTankBot()
         {
             IncomingMessages = new ObservableCollection<mBlockIncomingMessage>();
             OutgoingMessages = new ObservableCollection<mBlockOutgoingMessage>();

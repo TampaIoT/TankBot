@@ -1,7 +1,7 @@
 ﻿using System;
 using TampaIoT.TankBot.Core.Interfaces;
 
-namespace TampaIoT.TankBot.Firmware.Channels
+namespace TampaIoT.TankBot.Firmware.Networking
 {
     public class TCPListener : IDisposable
     {

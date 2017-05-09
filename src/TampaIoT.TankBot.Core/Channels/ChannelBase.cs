@@ -100,6 +100,8 @@ namespace TampaIoT.TankBot.Core.Channels
             get { return _id; }
         }
 
+        public abstract ChannelTypes ChannelType { get; }
+
         public RelayCommand ConnectCommand { get; private set; }
         public RelayCommand DisconnectCommand { get; private set; }
         public RelayCommand SendCommand { get; private set; }

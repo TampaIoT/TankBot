@@ -9,7 +9,7 @@ using TampaIoT.TankBot.Firmware.Sensors;
 using TampaIoT.TankBot.Core.Models;
 using TampaIoT.TankBot.Core.Messages;
 
-namespace TampaIoT.TankBot.Firmware.Channels
+namespace TampaIoT.TankBot.Firmware.Networking
 {
     public class Server
     {
@@ -95,11 +95,7 @@ namespace TampaIoT.TankBot.Firmware.Channels
                 await client.Write(msg.GetBuffer());
             }
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="state"></param>
+        
         private void _watchDog_Tick(object state)
         {
             var clientsToRemove = new List<Client>();

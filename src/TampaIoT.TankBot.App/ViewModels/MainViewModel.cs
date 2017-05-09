@@ -16,14 +16,13 @@ namespace TampaIoT.TankBot.App.ViewModels
         {
             TogglePaneVisibilityCommand = new RelayCommand(TagglePaneVisibility);
             SearchVM = new SearchTankBotViewModel();
-            TankBotVM = new TankBotViewModel(TankBotLogger);
+            
         }
 
         private async void ConnectTankBotAsync(IChannel channel)
         {
             if (await channel.ConnectAsync())
             {
-                TankBotVM.SetChannel(channel);
                 if (IsPaneOpen)
                 {
                     IsPaneOpen = false;
@@ -74,6 +73,12 @@ namespace TampaIoT.TankBot.App.ViewModels
         }
 
         public SearchTankBotViewModel SearchVM { get; private set; }
-        public TankBotViewModel TankBotVM { get; private set; }
+
+        IClientTankBotViewModel _clientTankBotViewModel;
+        public IClientTankBotViewModel ClientTankBotViewModel
+        {
+            get { return _clientTankBotViewModel; }
+            set { Set(ref _clientTankBotViewModel, value); }
+        }
     }
 }

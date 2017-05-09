@@ -1,9 +1,20 @@
-﻿using System;
+﻿using LagoVista.Core.PlatformSupport;
+using System;
+using System.Linq;
+using System.Diagnostics;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Networking.Connectivity;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using TampaIoT.TankBot.Firmware.Sensors;
+using TampaIoT.TankBot;
+using TampaIoT.TankBot.Core.Interfaces;
+using Windows.System.Profile;
+using TampaIoT.TankBot.UWP.Core.Channels;
+using TampaIoT.TankBot.Core.Simulators;
+using Windows.Networking;
 
 namespace TampaIoT.TankBot.Firmware
 {
@@ -13,6 +24,10 @@ namespace TampaIoT.TankBot.Firmware
     sealed partial class App : Application
     {
         private static App _app;
+
+        ITankBotLogger _logger;
+        SensorManager _sensorManager;
+        ITankBot _tankBot;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -70,9 +85,63 @@ namespace TampaIoT.TankBot.Firmware
                     // parameter
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
+
+                InitSockerBot();
+
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
+        }
+
+        private async void InitSockerBot()
+        {
+            var hostNames = NetworkInformation.GetHostNames();
+            var computerName = hostNames.FirstOrDefault(name => name.Type == HostNameType.DomainName)?.DisplayName ?? "???";
+
+            var pin = await LagoVista.Core.PlatformSupport.Services.Storage.GetKVPAsync<string>("PIN");
+            if (String.IsNullOrEmpty(pin))
+            {
+                var rnd = new Random();
+                pin = rnd.Next(1000, 9999).ToString();
+                await LagoVista.Core.PlatformSupport.Services.Storage.StoreKVP("PIN", pin);
+            }
+
+            Debug.Write("========================================");
+            Debug.Write("NOTE: NOTE: NOTE: Your PIN is: " + pin);
+            Debug.Write("========================================");
+
+            _logger = new Loggers.DebugLogger();
+
+            switch (AnalyticsInfo.VersionInfo.DeviceFamily)
+            {
+                case "Windows.IoT":
+                    var ports = (await LagoVista.Core.PlatformSupport.Services.DeviceManager.GetSerialPortsAsync());
+                    if (ports.Count == 0)
+                    {
+                        throw new Exception("Could not find any serial ports, a serial port is required.");
+                    }
+                    else if (ports.Count > 1)
+                    {
+                        throw new Exception("Found more than one serial port, please add additional logic to select the serial port the mBot is connected to.");
+                    }
+
+                    var serialPortChannel = new SerialPortChannel(ports.First().Id, _logger);
+                    await serialPortChannel.ConnectAsync();
+                    _tankBot = new mBlockTankBot(serialPortChannel, _logger, pin);
+                    _sensorManager = new SensorManager();
+                    await _sensorManager.InitAsync();
+                    _sensorManager.Start();
+
+                    Managers.ConnectionManager.Instance.MakeDiscoverable(computerName);
+                    break;
+                case "Windows.Desktop":
+                    _tankBot = new SimulatedSoccerBot();
+
+                    break;
+            }
+
+            Managers.ConnectionManager.Instance.Start(computerName, _tankBot, _logger, _sensorManager, 80, 9001);
+
         }
 
         /// <summary>

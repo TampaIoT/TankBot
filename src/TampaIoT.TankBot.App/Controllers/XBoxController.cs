@@ -9,9 +9,8 @@ using Windows.UI.Core;
 
 namespace TampaIoT.TankBot.App.Controllers
 {
-    public class XBoxController
+    public class XBoxController : IJoyStick
     {
-
         private Gamepad _gamePad = null;
         private GamepadReading? _lastReading = null;
 

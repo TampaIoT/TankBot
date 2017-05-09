@@ -3,7 +3,7 @@ using Windows.Devices.Gpio;
 
 namespace TampaIoT.TankBot.Firmware.Sensors
 {
-    public class IRSensorArray
+    public class IRProximitySensorArray
     {
         public const int BANK_ONE_OUTPUT = 12;
         public const int BANK_TWO_OUTPUT = 26;
@@ -22,30 +22,30 @@ namespace TampaIoT.TankBot.Firmware.Sensors
         GpioPin _bank1;
         GpioPin _bank2;
 
-        IRSensor _front;
-        IRSensor _frontRight;
-        IRSensor _frontLeft;
+        IRProximitySensor _front;
+        IRProximitySensor _frontRight;
+        IRProximitySensor _frontLeft;
 
-        IRSensor _leftSide;
-        IRSensor _rightSide;
+        IRProximitySensor _leftSide;
+        IRProximitySensor _rightSide;
 
-        IRSensor _rear;
-        IRSensor _rearLeft;
-        IRSensor _rearRight;
+        IRProximitySensor _rear;
+        IRProximitySensor _rearLeft;
+        IRProximitySensor _rearRight;
 
-        public IRSensorArray(GpioController gpioController)
+        public IRProximitySensorArray(GpioController gpioController)
         {
-            _frontLeft = new IRSensor(gpioController, FRONT_LEFT);
-            _front = new IRSensor(gpioController, FRONT);
-            _frontRight = new IRSensor(gpioController, FRONT_RIGHT);
+            _frontLeft = new IRProximitySensor(gpioController, FRONT_LEFT);
+            _front = new IRProximitySensor(gpioController, FRONT);
+            _frontRight = new IRProximitySensor(gpioController, FRONT_RIGHT);
 
-            _leftSide = new IRSensor(gpioController, LEFT);
-            _rightSide = new IRSensor(gpioController, RIGHT);
+            _leftSide = new IRProximitySensor(gpioController, LEFT);
+            _rightSide = new IRProximitySensor(gpioController, RIGHT);
 
 
-            _rearLeft = new IRSensor(gpioController, REAR_LEFT);
-            _rear = new IRSensor(gpioController, REAR);
-            _rearRight = new IRSensor(gpioController, REAR_RIGHT);
+            _rearLeft = new IRProximitySensor(gpioController, REAR_LEFT);
+            _rear = new IRProximitySensor(gpioController, REAR);
+            _rearRight = new IRProximitySensor(gpioController, REAR_RIGHT);
 
             _bank1 = gpioController.OpenPin(BANK_ONE_OUTPUT);
             _bank1.SetDriveMode(GpioPinDriveMode.Output);
@@ -112,16 +112,16 @@ namespace TampaIoT.TankBot.Firmware.Sensors
             });
         }
 
-        public IRSensor FrontLeft { get { return _frontLeft; } }
-        public IRSensor Front { get { return _front; } }
-        public IRSensor FrontRight { get { return _frontRight; } }
+        public IRProximitySensor FrontLeft { get { return _frontLeft; } }
+        public IRProximitySensor Front { get { return _front; } }
+        public IRProximitySensor FrontRight { get { return _frontRight; } }
 
-        public IRSensor Right { get { return _rightSide; } }
-        public IRSensor Left { get { return _leftSide; } }
+        public IRProximitySensor Right { get { return _rightSide; } }
+        public IRProximitySensor Left { get { return _leftSide; } }
 
-        public IRSensor RearLeft { get { return _rearLeft; } }
-        public IRSensor Rear { get { return _rear; } }
-        public IRSensor RearRight { get { return _rearRight; } }
+        public IRProximitySensor RearLeft { get { return _rearLeft; } }
+        public IRProximitySensor Rear { get { return _rear; } }
+        public IRProximitySensor RearRight { get { return _rearRight; } }
 
     }
 }

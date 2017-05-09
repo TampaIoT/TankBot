@@ -8,7 +8,7 @@ namespace TampaIoT.TankBot.Firmware.Sensors
     public class SensorManager 
     {
         Compass5983 _compass;
-        IRSensorArray _irSensorArray;
+        IRProximitySensorArray _irSensorArray;
         Sonar _frontSonar;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -22,7 +22,7 @@ namespace TampaIoT.TankBot.Firmware.Sensors
         public async Task InitAsync()
         {
             var gpio = GpioController.GetDefault();
-            _irSensorArray = new IRSensorArray(gpio);
+            _irSensorArray = new IRProximitySensorArray(gpio);
             await _compass.InitAsync();            
         }
 
@@ -38,7 +38,7 @@ namespace TampaIoT.TankBot.Firmware.Sensors
         }
 
         public Compass5983 Compass { get { return _compass; } }
-        public IRSensorArray SensorArray { get { return _irSensorArray; } }
+        public IRProximitySensorArray SensorArray { get { return _irSensorArray; } }
 
         public Sonar FrontSonar { get { return _frontSonar; } }
     }

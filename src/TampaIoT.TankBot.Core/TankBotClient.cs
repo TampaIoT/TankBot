@@ -17,7 +17,7 @@ namespace TampaIoT.TankBot.Core
         public TankBotClient(IChannel channel, ITankBotLogger logger, string pin = "9999")
         {
             _channel = channel;
-            _channel.NetworkMessageReceived += _channel_NetworkMessageReceived;
+            //_channel.NetworkMessageReceived += _channel_NetworkMessageReceived;
             _logger = logger;
         }
 

@@ -8,7 +8,7 @@ using TampaIoT.TankBot.Core.Interfaces;
 using TampaIoT.TankBot.Core.Models;
 using TampaIoT.TankBot.Core.Messages;
 
-namespace TampaIoT.TankBot.Firmware.Channels
+namespace TampaIoT.TankBot.Firmware.Networking
 {
     public class Client : IDisposable
     {
