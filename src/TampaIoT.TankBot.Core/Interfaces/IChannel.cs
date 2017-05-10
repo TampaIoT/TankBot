@@ -24,6 +24,8 @@ namespace TampaIoT.TankBot.Core.Interfaces
     {
         String Id { get; set; }
 
+        String DeviceName { get; set; }
+
         ChannelTypes ChannelType { get; }
 
         DateTime? LastMessageReceived { get; }
@@ -38,5 +40,8 @@ namespace TampaIoT.TankBot.Core.Interfaces
 
         Task<bool> ConnectAsync();
         Task DisconnectAsync();
+
+        bool IsRemote { get; }
+        bool IsLocal { get; }
     }
 }

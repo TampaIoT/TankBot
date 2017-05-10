@@ -8,7 +8,7 @@ namespace TampaIoT.TankBot.Firmware.Managers
     public interface IConnectionManager
     {
         string GetDefaultPageHTML(string message);
-        void Start(string tankBotName, ITankBot tankBot, ITankBotLogger logger, ISensorManager sensorManager, int webServerPort, int tcpListenerPort);
+        void Start(string tankBotName, ITankBot tankBot, ITankBotLogger logger, ISensorManager sensorManager, int webServerPort, int tcpListenerPort, int uPnPListenPort);
 
         ITankBot TankBot { get; }
         ISensorManager SensorManager { get; }

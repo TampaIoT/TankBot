@@ -15,7 +15,7 @@ namespace TampaIoT.TankBot.Firmware.Networking
     public class Server : IServer
     {
         ITankBotLogger _logger;
-        ITankBot _soccerBot;
+        ITankBot _tankBot;
         ISensorManager _sensorManager;
         ConcurrentDictionary<String, IClient> _clients;
         ITCPListener _listener;
@@ -31,14 +31,14 @@ namespace TampaIoT.TankBot.Firmware.Networking
         {
             _port = port;
             _logger = logger;
-            _soccerBot = soccerBot;
+            _tankBot = soccerBot;
 
             _sensorManager = sensorManager;
 
             _clients = new ConcurrentDictionary<string, IClient>();
 
             _watchDog = new System.Threading.Timer(_watchDog_Tick, null, 0, 2500);
-            _sensorUpdateTimer = new System.Threading.Timer(_sensorUpdateTimer_Tick, null, 0, 1000);
+            _sensorUpdateTimer = new System.Threading.Timer(_sensorUpdateTimer_Tick, null, 0, 100);
         }
 
         public void Start()
@@ -66,12 +66,22 @@ namespace TampaIoT.TankBot.Firmware.Networking
 
         private async void _sensorUpdateTimer_Tick(object sender)
         {
+            if (_tankBot.LastBotContact.HasValue)
+            {
+                var delta = DateTime.Now - _tankBot.LastBotContact.Value;
+                App.TheApp.HasMBotConnection = delta.TotalSeconds < 5;                
+            }
+            else
+                App.TheApp.HasMBotConnection = false;
+
             var sensorMessage = new SensorData()
             {
-                Version = _soccerBot.FirmwareVersion,
-                DeviceName = _soccerBot.DeviceName,
+                Version = _tankBot.FirmwareVersion,
+                DeviceName = _tankBot.DeviceName,
+                MBotConnected = App.TheApp.HasMBotConnection,
+                FrontSonar = new Sensor() {  Value = _tankBot.FrontSonar.ToString() }               
             };
-
+           
             _sensorManager.UpdateSensorData(sensorMessage);
 
             var msg = NetworkMessage.CreateJSONMessage(sensorMessage, Core.Messages.SensorData.MessageTypeId);
@@ -99,11 +109,11 @@ namespace TampaIoT.TankBot.Firmware.Networking
                 /* If we only have one client left, turn LEDs red */
                 if (_clients.Count == 1)
                 {
-                    _soccerBot.SetLED(0, NamedColors.Red);
+                    _tankBot.SetLED(0, NamedColors.Yellow);
                 }
 
                 /* Play tone if client dropped */
-                _soccerBot.PlayTone(200);
+                _tankBot.PlayTone(200);
             }
 
             foreach (var client in clientsToRemove)
@@ -119,8 +129,8 @@ namespace TampaIoT.TankBot.Firmware.Networking
 
         public void ClientConnected(StreamSocket socket)
         {
-            _soccerBot.PlayTone(400);
-            _soccerBot.SetLED(0, NamedColors.Green);
+            _tankBot.PlayTone(400);
+            _tankBot.SetLED(0, NamedColors.Green);
 
             lock (_clients)
             {
@@ -148,11 +158,11 @@ namespace TampaIoT.TankBot.Firmware.Networking
                 case Move.MessageTypeId:
                     {
                         var movePayload = e.DeserializePayload<Move>();
-                        _soccerBot.Move(movePayload.Speed, movePayload.RelativeHeading, movePayload.AbsoluteHeading, movePayload.Duration);
+                        _tankBot.Move(movePayload.Speed, movePayload.RelativeHeading, movePayload.AbsoluteHeading, movePayload.Duration);
                     }
                     break;
                 case Core.Messages.Stop.MessageTypeId:
-                    _soccerBot.Stop();
+                    _tankBot.Stop();
                     break;
             }
         }

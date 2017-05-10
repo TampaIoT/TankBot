@@ -18,14 +18,16 @@ namespace TampaIoT.TankBot.App.Controllers
 
         Point? _lastJoyStick;
 
-        public void Init()
-        {
-            Gamepad.GamepadAdded += Gamepad_GamepadAdded;
-            Gamepad.GamepadRemoved += Gamepad_GamepadRemoved;
-        }
-
         public async void StartListening(CoreDispatcher dispatcher)
         {
+            if (Gamepad.Gamepads.Any())
+            {
+                _gamePad = Gamepad.Gamepads.First();
+            }
+
+            Gamepad.GamepadAdded += Gamepad_GamepadAdded;
+            Gamepad.GamepadRemoved += Gamepad_GamepadRemoved;
+
             while (true)
             {
                 await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -39,7 +41,14 @@ namespace TampaIoT.TankBot.App.Controllers
 
                         if (_lastJoyStick.HasValue && (_lastJoyStick.Value.X != thisJoyStick.X || _lastJoyStick.Value.Y != thisJoyStick.Y))
                         {
-                            JoyStickUpdated?.Invoke(_gamePad, thisJoyStick);
+                            if ((Math.Abs(thisJoyStick.X) < 0.05) && (Math.Abs(thisJoyStick.Y) < 0.05))
+                            {
+                                JoyStickUpdated?.Invoke(_gamePad, new Point(0,0));
+                            }
+                            else
+                            {
+                                JoyStickUpdated?.Invoke(_gamePad, thisJoyStick);
+                            }
                         }
 
                         _lastJoyStick = thisJoyStick;

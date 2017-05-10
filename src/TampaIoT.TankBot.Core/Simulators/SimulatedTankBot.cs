@@ -9,12 +9,12 @@ namespace TampaIoT.TankBot.Core.Simulators
 {
     public class SimulatedSoccerBot : TankBotBase, ITankBot
     {
-        public ISensor FrontSonar
+        public ISensor FrontSonarSensor
         {
             get; set;
         }
 
-        public ISensor Compass
+        public ISensor CompassSensor
         {
             get; set;
         }
@@ -59,5 +59,8 @@ namespace TampaIoT.TankBot.Core.Simulators
         {
 
         }
+
+        public int FrontSonar { get; private set; }
+
     }
 }

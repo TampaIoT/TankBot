@@ -83,6 +83,7 @@ namespace TampaIoT.TankBot.App
                 LagoVista.Core.UWP.Services.UWPDeviceServices.Init(rootFrame.Dispatcher);
 
                 _joystick = new XBoxController();
+                _joystick.StartListening(rootFrame.Dispatcher);
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;

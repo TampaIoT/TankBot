@@ -3,6 +3,7 @@ using LagoVista.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,8 +25,15 @@ namespace TampaIoT.TankBot.App.ViewModels
 
             StartSearchingCommand = new RelayCommand(StartSearching);
             StopSearchingCommand = new RelayCommand(StopSearching);
+            RefreshCommand = new RelayCommand(Refresh);
 
-            RegisterChannelWatcher(new FakeWatcher(App.TheApp.Logger));
+            if (Debugger.IsAttached && false)
+            {
+                RegisterChannelWatcher(new FakeWatcher(App.TheApp.Logger));
+            }
+
+            RegisterChannelWatcher(new UPNPChannelWatcher(App.TheApp.Logger));
+            RegisterChannelWatcher(new BluetoothChannelWatcher(App.TheApp.Logger));
         }
 
         public void RegisterChannelWatcher(IChannelWatcher channelWatcher)
@@ -34,6 +42,12 @@ namespace TampaIoT.TankBot.App.ViewModels
             channelWatcher.DeviceRemovedEvent += ChannelWatcher_DeviceRemovedEvent;
             channelWatcher.ClearDevices += ChannelWatcher_ClearDevices;
             _channelWatchers.Add(channelWatcher);
+        }
+
+        public void Refresh()
+        {
+            StopSearching();
+            StartSearching();
         }
 
         public void StartSearching()
@@ -71,7 +85,10 @@ namespace TampaIoT.TankBot.App.ViewModels
             {
                 if (!AvailableChannels.Contains(e))
                 {
-                    AvailableChannels.Add(e);
+                    if (!AvailableChannels.Where(channel => channel.Id == e.Id).Any())
+                    {
+                        AvailableChannels.Add(e);
+                    }
                 }
             }
         }
@@ -81,12 +98,13 @@ namespace TampaIoT.TankBot.App.ViewModels
             AvailableChannels.Clear();
         }
 
-        public RelayCommand StartSearchingCommand { get; set; }
+        public RelayCommand StartSearchingCommand { get; private set; }
 
-        public RelayCommand StopSearchingCommand { get; set; }
+        public RelayCommand RefreshCommand { get; private set; }
 
-        public ObservableCollection<AvailableTankBot> TankBots { get; set; }
+        public RelayCommand StopSearchingCommand { get; private set; }
 
+       
         public ObservableCollection<IChannel> AvailableChannels { get { return _availableChannels; } }
     }
 }

@@ -10,11 +10,11 @@ using Newtonsoft.Json;
 namespace TampaIoT.TankBot.App.ViewModels
 {
 
-    public class RemotClientTankBotViewModel : TankBotClientBase, IClientTankBotViewModel
+    public class RemoteClientTankBotViewModel : TankBotClientBase, IClientTankBotViewModel
     {
         INetworkChannel _networkChannel;
 
-        public RemotClientTankBotViewModel(IChannel channel, IJoyStick joyStick) : base(joyStick)
+        public RemoteClientTankBotViewModel(IChannel channel, IJoyStick joyStick) : base(joyStick)
         {
             _networkChannel = channel as INetworkChannel;
             _networkChannel.Disconnected += _networkChannel_Disconnected;
@@ -32,11 +32,18 @@ namespace TampaIoT.TankBot.App.ViewModels
 
         private void _networkChannel_NetworkMessageReceived(object sender, Core.Models.NetworkMessage e)
         {
-            switch (e.MessageTypeCode)
+            try
             {
-                case SensorData.MessageTypeId:
-                    SensorData = e.DeserializePayload<SensorData>();
-                    break;
+                switch (e.MessageTypeCode)
+                {
+                    case SensorData.MessageTypeId:
+                        SensorData = e.DeserializePayload<SensorData>();
+                        break;
+                }
+            }
+            catch(Exception ex)
+            {
+                Logger.LogException("RemoteClient_NetworkMessageReceived", ex);
             }
         }
  

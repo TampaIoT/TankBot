@@ -1,8 +1,4 @@
-﻿using LagoVista.Core.PlatformSupport;
-using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using TampaIoT.TankBot.Core.Interfaces;
+﻿using TampaIoT.TankBot.Core.Interfaces;
 
 namespace TampaIoT.TankBot.Firmware.Sensors
 {

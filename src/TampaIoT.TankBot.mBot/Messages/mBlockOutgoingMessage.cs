@@ -23,6 +23,13 @@ namespace TampaIoT.TankBot.mBot.Messages
         private mBlockOutgoingMessage()
         {
             MessageSerialNumber = MessageIndexCounter++;
+            /* The mbot recycles message serial numbers at 0x7f */
+            if (MessageSerialNumber == 0x80)
+            {
+                MessageSerialNumber = 0x00;
+                MessageIndexCounter = 0x00;
+            }
+
             DateStamp = DateTime.Now;
         }
 
@@ -55,7 +62,7 @@ namespace TampaIoT.TankBot.mBot.Messages
                 buffer[position++] = 0xFF;
                 buffer[position++] = 0x55;
                 buffer[position++] = Convert.ToByte(length - HEADER_LENGTH);
-                buffer[position++] = (byte)(MessageSerialNumber & 0xFF);
+                buffer[position++] = (byte)(MessageSerialNumber);
                 buffer[position++] = Convert.ToByte(CommandType);
                 buffer[position++] = Convert.ToByte(Device);
                 if (Parameter.HasValue)

@@ -53,7 +53,7 @@ namespace TampaIoT.TankBot.Firmware.Networking
 
         private async void _parser_MessageReady(object sender, NetworkMessage e)
         {
-            if(e.MessageTypeCode == SystemMessages.Ping)
+            if (e.MessageTypeCode == SystemMessages.Ping)
             {
                 await Write(SystemMessages.CreatePong().GetBuffer());
                 _logger.NotifyUserInfo("Client_MessageReceived", "Ping Received >> Pong Sent");
@@ -65,7 +65,7 @@ namespace TampaIoT.TankBot.Firmware.Networking
 
 
             _lastMessageDateStamp = DateTime.Now;
-            
+
         }
 
         public static IClient Create(StreamSocket socket, ITankBotLogger logger)
@@ -96,7 +96,7 @@ namespace TampaIoT.TankBot.Firmware.Networking
                         running = false;
                         /* Task Cancellation */
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         running = false;
                         _logger.NotifyUserError("Client_Listening", ex.Message);
@@ -127,7 +127,7 @@ namespace TampaIoT.TankBot.Firmware.Networking
                     await _writer.WriteAsync(buffer.ToCharArray());
                     await _writer.FlushAsync();
                 }
-                catch(Exception )
+                catch (Exception)
                 {
                     Disconnect();
                 }
@@ -135,40 +135,63 @@ namespace TampaIoT.TankBot.Firmware.Networking
         }
 
         public string Id { get { return _id; } }
-        
+
         public void Dispose()
         {
             lock (this)
             {
-                if (_reader != null)
+
+                try
                 {
-                    _reader.Dispose();
-                    _reader = null;
+                    if (_reader != null)
+                    {
+                        _reader.Dispose();
+                        _reader = null;
+                    }
+                }
+                catch (Exception) { /* catch any failures shutting down */ }
+
+                try
+                {
+                    if (_writer != null)
+                    {
+                        _writer.Dispose();
+                        _writer = null;
+                    }
+                }
+                catch (Exception) { /* catch any failures shutting down */ }
+
+                try
+                {
+                    if (_inputStream != null)
+                    {
+                        _inputStream.Dispose();
+                        _inputStream = null;
+                    }
+                }
+                catch (Exception) { /* catch any failures shutting down */ }
+
+
+                try
+                {
+                    if (_outputStream != null)
+                    {
+                        _outputStream.Dispose();
+                        _outputStream = null;
+                    }
                 }
 
-                if (_writer != null)
-                {
-                    _writer.Dispose();
-                    _writer = null;
-                }
+                catch (Exception) { /* catch any failures shutting down */ }
 
-                if (_inputStream != null)
+                try
                 {
-                    _inputStream.Dispose();
-                    _inputStream = null;
+                    if (_socket != null)
+                    {
+                        _socket.Dispose();
+                        _socket = null;
+                    }
                 }
-
-                if (_outputStream != null)
-                {
-                    _outputStream.Dispose();
-                    _outputStream = null;
-                }
-
-                if (_socket != null)
-                {
-                    _socket.Dispose();
-                    _socket = null;
-                }
+                catch (Exception) { /* catch any failures shutting down */ }
             }
         }
     }

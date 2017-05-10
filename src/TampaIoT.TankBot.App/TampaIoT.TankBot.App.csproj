@@ -100,11 +100,13 @@
     <Compile Include="Controls\JoyStick.xaml.cs">
       <DependentUpon>JoyStick.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BoolVisibilityConverter.cs" />
+    <Compile Include="Converters\VisibilityConverter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\RemotClientTankBotViewModel.cs" />
+    <Compile Include="ViewModels\RemoteClientTankBotViewModel.cs" />
     <Compile Include="ViewModels\IClientTankBotViewModel.cs" />
     <Compile Include="ViewModels\LocalClientTankBotViewModel.cs" />
     <Compile Include="ViewModels\SearchTankBotViewModel.cs" />
@@ -118,6 +120,8 @@
     <None Include="TampaIoT.TankBot.App_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Bluetooth.png" />
+    <Content Include="Assets\WiFi.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

@@ -1,5 +1,4 @@
 ﻿using LagoVista.Core.Commanding;
-using LagoVista.Core.PlatformSupport;
 using LagoVista.Core.ViewModels;
 using System.Collections.ObjectModel;
 using TampaIoT.TankBot.Core.Interfaces;
@@ -10,28 +9,43 @@ namespace TampaIoT.TankBot.App.ViewModels
 
     public class MainViewModel : ViewModelBase
     {
-        public ObservableCollection<Notification> Notifications { get { return  TankBotLogger.Notifications; } }
+        public ObservableCollection<Notification> Notifications { get { return TankBotLogger.Notifications; } }
 
         public MainViewModel()
         {
             TogglePaneVisibilityCommand = new RelayCommand(TagglePaneVisibility);
+            SearchCommand = new RelayCommand(Search);
             SearchVM = new SearchTankBotViewModel();
+            Message = "Press Search for TankBots to Find Your TankBot.";
         }
 
         private async void ConnectTankBotAsync(IChannel channel)
         {
-            if (await channel.ConnectAsync())
+            if (channel != null)
             {
-                if (IsPaneOpen)
+                if (await channel.ConnectAsync())
                 {
-                    IsPaneOpen = false;
-                }
-                
-                switch(channel.ChannelType)
-                {
-                    case ChannelTypes.Local: ClientTankBotViewModel = new LocalClientTankBotViewModel(channel, TankBotLogger, App.TheApp.JoyStick); break;
-                    case ChannelTypes.Simulated:
-                    case ChannelTypes.Remote: ClientTankBotViewModel = new LocalClientTankBotViewModel(channel, TankBotLogger, App.TheApp.JoyStick); break;
+                    if (IsPaneOpen)
+                    {
+                        IsPaneOpen = false;
+                    }
+
+                    if (_currentChannel != null)
+                    {
+                        _currentChannel.Disconnected -= _currentChannel_Disconnected;
+                    }
+
+                    _currentChannel = channel;
+                    _currentChannel.Disconnected += _currentChannel_Disconnected;
+
+                    RaisePropertyChanged(nameof(CurrentChannel));
+
+                    switch (channel.ChannelType)
+                    {
+                        case ChannelTypes.Local: ClientTankBotViewModel = new LocalClientTankBotViewModel(channel, TankBotLogger, App.TheApp.JoyStick); break;
+                        case ChannelTypes.Simulated:
+                        case ChannelTypes.Remote: ClientTankBotViewModel = new RemoteClientTankBotViewModel(channel, App.TheApp.JoyStick); break;
+                    }
                 }
             }
         }
@@ -44,15 +58,21 @@ namespace TampaIoT.TankBot.App.ViewModels
             get { return _currentChannel; }
             set
             {
-                Set(ref _currentChannel, value);
                 ConnectTankBotAsync(value);
             }
         }
-     
+
+        private void _currentChannel_Disconnected(object sender, string e)
+        {
+            _currentChannel = null;
+            RaisePropertyChanged(nameof(CurrentChannel));
+            ClientTankBotViewModel = null;
+        }
+
         public void TagglePaneVisibility()
         {
             IsPaneOpen = !IsPaneOpen;
-            if(IsPaneOpen)
+            if (IsPaneOpen)
             {
                 SearchVM.StartSearching();
             }
@@ -62,7 +82,7 @@ namespace TampaIoT.TankBot.App.ViewModels
                 SearchVM.AvailableChannels.Clear();
             }
         }
-        
+
         private bool _isPaneOpen = false;
         public bool IsPaneOpen
         {
@@ -71,6 +91,15 @@ namespace TampaIoT.TankBot.App.ViewModels
             {
                 _isPaneOpen = value;
                 RaisePropertyChanged();
+            }
+        }
+
+        public void Search()
+        {
+            if (!IsPaneOpen)
+            {
+                SearchVM.StartSearching();
+                IsPaneOpen = true;
             }
         }
 
@@ -83,5 +112,14 @@ namespace TampaIoT.TankBot.App.ViewModels
             set { Set(ref _clientTankBotViewModel, value); }
         }
         public RelayCommand TogglePaneVisibilityCommand { get; private set; }
+
+        public RelayCommand SearchCommand { get; private set; }
+
+        private string _message = null;
+        public string Message
+        {
+            get { return _message; }
+            set { Set(ref _message, value); }
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using TampaIoT.TankBot.Core.Interfaces;
 using TampaIoT.TankBot.Core.Messages;
 
+/*
 namespace TampaIoT.TankBot.Core
 {
     public class TankBotClient : TankBotBase, ITankBot
@@ -93,4 +94,4 @@ namespace TampaIoT.TankBot.Core
             SendCommand(_currentCommand);
         }
     }
-}
+}*/

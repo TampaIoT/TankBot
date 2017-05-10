@@ -1,5 +1,6 @@
 ﻿using LagoVista.Core.Networking.Interfaces;
 using LagoVista.Core.Networking.Services;
+using TampaIoT.TankBot.Core;
 using TampaIoT.TankBot.Core.Channels;
 using TampaIoT.TankBot.Core.Interfaces;
 using TampaIoT.TankBot.UWP.Core.Channels;
@@ -23,12 +24,14 @@ namespace TampaIoT.TankBot.UWP.Core.Watchers
             _ssdpClient = NetworkServices.GetSSDPClient();
             _ssdpClient.ShowDiagnostics = true;
             _ssdpClient.NewDeviceFound += _ssdpClient_NewDeviceFound;
-            _ssdpClient.SsdpQueryAsync(port: 1900);
+            _ssdpClient.SsdpQueryAsync(port: Constants.UPNPListenPort);
         }
 
         private void _ssdpClient_NewDeviceFound(object sender, LagoVista.Core.Networking.Models.uPnPDevice device)
         {
-            if (device.ModelName == "SoccerBot-mBot")
+            _logger.NotifyUserInfo("TCPIP Mgr", "Found Channel =>: " + device.FriendlyName);
+
+            if (device.ModelName == Constants.TankBotModelName)
             {
                 _logger.NotifyUserInfo("TCPIP Mgr", "Found Channel =>: " + device.FriendlyName);
                 RaiseDeviceFoundEvent(new TCPIPChannel(device, _logger));

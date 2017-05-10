@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Windows.Devices.Gpio;
 
 namespace TampaIoT.TankBot.Firmware.Sensors
@@ -55,42 +56,49 @@ namespace TampaIoT.TankBot.Firmware.Sensors
 
         public void Start()
         {
+            var rnd = new Random();
             Task.Run(async () =>
             {
                 while (true)
                 {
                     if (!App.TheApp.HasInternetConnection)
                     {
-                        for (var idx = 0; idx < 2; ++idx)
+                        for (var idx = 0; idx < 5; ++idx)
                         {
                             _bank1.Write(GpioPinValue.High);
+                            _bank2.Write(GpioPinValue.High);
+                            await Task.Delay(50);
+                            _bank1.Write(GpioPinValue.Low);
                             _bank2.Write(GpioPinValue.Low);
                             await Task.Delay(50);
-                            _bank2.Write(GpioPinValue.High);
-                            _bank1.Write(GpioPinValue.Low);
-                            await Task.Delay(50);
                         }
-                        await Task.Delay(500);
+
+
+                        await Task.Delay(1500);
 
                     }
                     else if (!App.TheApp.HasMBotConnection)
                     {
-                        for (var idx = 0; idx < 3; ++idx)
+                        for (var idx = 0; idx < 2; ++idx)
                         {
                             _bank1.Write(GpioPinValue.High);
-                            _bank2.Write(GpioPinValue.Low);
-                            await Task.Delay(50);
-                            _bank1.Write(GpioPinValue.Low);
                             _bank2.Write(GpioPinValue.High);
                             await Task.Delay(50);
+                            _bank1.Write(GpioPinValue.Low);
+                            _bank2.Write(GpioPinValue.Low);
+                            await Task.Delay(50);
                         }
-                        await Task.Delay(500);
+
+                        _bank1.Write(GpioPinValue.Low);
+                        _bank2.Write(GpioPinValue.Low);
+
+                        await Task.Delay(1500);
                     }
                     else 
                     {
                         _bank1.Write(GpioPinValue.High);
                         _bank2.Write(GpioPinValue.High);
-                        await Task.Delay(50);
+                        await Task.Delay(10);
 
                         _front.Read();
                         _frontLeft.Read();
@@ -106,7 +114,7 @@ namespace TampaIoT.TankBot.Firmware.Sensors
 
                         _bank1.Write(GpioPinValue.Low);
                         _bank2.Write(GpioPinValue.Low);
-                        await Task.Delay(500);
+                        await Task.Delay(rnd.Next(100,200));
                     }
                 }
             });

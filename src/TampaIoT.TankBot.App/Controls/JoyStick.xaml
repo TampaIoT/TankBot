@@ -11,9 +11,11 @@
     d:DesignWidth="200">
 
     <Canvas Width="200" Height="200">
-        <Line X1="0" X2="200" Y1="100" Y2="100" Stroke="Blue" StrokeThickness="3" />
-        <Line X1="100" X2="100" Y1="00" Y2="200" Stroke="Blue" StrokeThickness="3" />
-        <fa:FontAwesome  Icon="Circle" Canvas.Left="100" Canvas.Top="100" Margin="-15" />
-        
+        <Ellipse Width="200" Height="200" Stroke="#007fff" StrokeThickness="3" />
+        <Line X1="0" X2="200" Y1="100" Y2="100" Stroke="#007fff" StrokeThickness="2" />
+        <Line X1="100" X2="100" Y1="00" Y2="200" Stroke="#007fff" StrokeThickness="2" />
+
+        <fa:FontAwesome  Icon="Circle" Canvas.Left="{Binding JoystickDisplayX}" Canvas.Top="{Binding JoystickDisplayY}" Margin="-15"  />
+
     </Canvas>
 </UserControl>

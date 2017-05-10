@@ -22,8 +22,8 @@ namespace TampaIoT.TankBot
         mBlockIncomingMessage _currentIncomingMessage;
         DateTime _start;
         string _pin;
-        Timer _timer;
-        bool _connectedToBot;
+        Timer _requestVersionTimer;
+        bool _connectedToBot = false;
 
         public ObservableCollection<mBlockIncomingMessage> IncomingMessages { get; private set; }
         public ObservableCollection<mBlockOutgoingMessage> OutgoingMessages { get; private set; }
@@ -34,9 +34,10 @@ namespace TampaIoT.TankBot
             _logger = logger;
             _channel = channel;
             _channel.MessageReceived += _channel_MessageReceived;
-            Name = "mSoccerBot";
 
-            _timer = new Timer((state) => { RequestVersion(); }, null, 0, 5000);
+            Name = "mBotTankBot";
+
+            _requestVersionTimer = new Timer(RequestVersion, null, 0, 1000);
 
             ModeACommand = RelayCommand.Create(SendModeA);
             ModeBCommand = RelayCommand.Create(SendModeB);
@@ -121,12 +122,17 @@ namespace TampaIoT.TankBot
                 {
 
                     IncomingMessages.Add(_currentIncomingMessage);
-                    _logger.NotifyUserInfo("mBlock", "<<< " + _currentIncomingMessage.MessageHexString);
 
                     if (_currentIncomingMessage.BufferSize > 4)
                     {
                         _currentIncomingMessage.MessageSerialNumber = _currentIncomingMessage.Buffer[2];
+                        _logger.NotifyUserInfo("mBlock", $"<<< {_currentIncomingMessage.MessageSerialNumber:X2}. " + _currentIncomingMessage.MessageHexString);
+
                         ProcessMessage(_currentIncomingMessage);
+                    }
+                    else
+                    {
+                        _logger.NotifyUserInfo("mBlock", $"<<< XXXXX. " + _currentIncomingMessage.MessageHexString);
                     }
 
                     _currentIncomingMessage = new mBlockIncomingMessage();
@@ -141,7 +147,7 @@ namespace TampaIoT.TankBot
                 SendCommand(CurrentState);
             }
         }
-  
+
 
         private async void SendMessage(mBlockOutgoingMessage msg)
         {
@@ -156,7 +162,7 @@ namespace TampaIoT.TankBot
             try
             {
                 OutgoingMessages.Add(msg);
-                _logger.NotifyUserInfo("mBlock", ">>> " + msg.MessageHexString);
+                _logger.NotifyUserInfo("mBlock", $">>> {msg.MessageSerialNumber:X2}. " + msg.MessageHexString);
                 await _channel.WriteBuffer(msg.Buffer);
             }
             catch (Exception ex)
@@ -239,7 +245,7 @@ namespace TampaIoT.TankBot
             SendMessage(mBlockOutgoingMessage.CreateMessage(mBlockIncomingMessage.CommandTypes.Reset, mBlockMessage.Devices.SYSTEM));
         }
 
-       
+
         public void ProcessVersion(mBlockIncomingMessage message)
         {
             if (!String.IsNullOrEmpty(message.StringPayload))
@@ -267,32 +273,62 @@ namespace TampaIoT.TankBot
 
                 if (!_connectedToBot)
                 {
+                    _logger.NotifyUserError("mTankBot_RequestVersion", "Made Contact with mBot");
                     PlayTone(294);
                     SetLED(0, NamedColors.Yellow);
                 }
 
-                this.LastBotContact = DateTime.Now;
+                LastBotContact = DateTime.Now;
+
+                StartSensorRefreshTimer();
 
                 _connectedToBot = true;
             }
         }
 
-        public void RequestSonar()
+        public void ProcessSonar(mBlockIncomingMessage message)
         {
-            var msg = mBlockOutgoingMessage.CreateMessage(mBlockOutgoingMessage.CommandTypes.Get, mBlockOutgoingMessage.Devices.ULTRASONIC_SENSOR, mBlockMessage.Ports.PORT_3);
-            //msg.Handler = ProcessSonar;
-            //SendMessage(msg);
+            FrontSonar = Convert.ToInt32(_currentIncomingMessage.FloatPayload);
+            LastBotContact = DateTime.Now;
+
+            var factor = Speed / 100;
+
+            if (FrontSonar < (10 * factor) && CurrentState == Commands.Forward)
+            {
+                _logger.NotifyUserError("mTankBot_ProcessSonar", "Sending Stop Command");
+
+                PauseRefreshTimer();
+                SendCommand(Commands.Stop);
+                StartRefreshTimer();
+            }
         }
 
-        public void RequestVersion()
+        public void RequestSonar()
         {
-            var msg = mBlockOutgoingMessage.CreateMessage(mBlockOutgoingMessage.CommandTypes.Get, mBlockOutgoingMessage.Devices.VERSION);
-            msg.Handler = ProcessVersion;
-            SendMessage(msg);
-
-            if (!this.LastBotContact.HasValue || ((DateTime.Now - this.LastBotContact.Value) > TimeSpan.FromSeconds(12)))
+            if (_connectedToBot)
             {
+                var msg = mBlockOutgoingMessage.CreateMessage(mBlockOutgoingMessage.CommandTypes.Get, mBlockOutgoingMessage.Devices.ULTRASONIC_SENSOR, mBlockMessage.Ports.PORT_3);
+                msg.Handler = ProcessSonar;
+                SendMessage(msg);
+            }
+        }
+
+        public void RequestVersion(object state)
+        {
+            if (!_connectedToBot)
+            {
+                var msg = mBlockOutgoingMessage.CreateMessage(mBlockOutgoingMessage.CommandTypes.Get, mBlockOutgoingMessage.Devices.VERSION);
+                msg.Handler = ProcessVersion;
+                SendMessage(msg);
+            }
+            else if (!this.LastBotContact.HasValue || ((DateTime.Now - this.LastBotContact.Value).TotalSeconds > 2))
+            {
+                _logger.NotifyUserError("mTankBot_RequestVersion", "Lost Contact with mBot");
                 _connectedToBot = false;
+
+                var msg = mBlockOutgoingMessage.CreateMessage(mBlockOutgoingMessage.CommandTypes.Get, mBlockOutgoingMessage.Devices.VERSION);
+                msg.Handler = ProcessVersion;
+                SendMessage(msg);
             }
         }
 
@@ -345,7 +381,7 @@ namespace TampaIoT.TankBot
             var rgbMessage = mBlockOutgoingMessage.CreateMessage(mBlockOutgoingMessage.CommandTypes.Run, mBlockOutgoingMessage.Devices.RGBLED, 0, payload);
             SendMessage(rgbMessage);
         }
-        
+
         public void SetRGBA1sync(byte r, byte g, byte b)
         {
             var payload = new byte[3] { r, g, b };
@@ -358,7 +394,7 @@ namespace TampaIoT.TankBot
             var radians = relativeHeading.Value * (Math.PI / 180);
             var x = Math.Sin(radians);
             var y = Math.Cos(radians);
-            
+
             //Filter out the "dead-zone" of the joystick
             if (Math.Abs(y) < 0.1) y = 0;
             if (Math.Abs(x) < 0.1) x = 0;
@@ -370,7 +406,7 @@ namespace TampaIoT.TankBot
             if (x < 0) leftMotor = Convert.ToInt16(leftMotor * (1 - Math.Abs(x)));
 
             Debug.WriteLine($"SENDING: {x} {y}");
-            
+
             SendMotorPower(-leftMotor, rightMotor);
         }
 
@@ -415,7 +451,9 @@ namespace TampaIoT.TankBot
                 RaisePropertyChanged();
             }
         }
-        
-        public SensorData SensorData { get; set; }
+
+        public bool ConnectedToMBot { get { return _connectedToBot; } }
+
+        public int FrontSonar { get; private set; }
     }
 }

@@ -5,12 +5,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 
 namespace TampaIoT.TankBot.Core
 {
     public abstract class TankBotBase : INotifyPropertyChanged
     {
         public const string UNKOWN_VERSION = "??";
+
+        System.Threading.Timer _sensorRefreshTimer;
+        private bool _sensorTimeEnabled = false;
 
         public enum Commands
         {
@@ -21,8 +25,6 @@ namespace TampaIoT.TankBot.Core
             Stop,
             Reset
         }
-
-        ITimer _sensorRefreshTimer;
 
         public String Id { get; set; }
         public String Name { get; set; }
@@ -49,7 +51,7 @@ namespace TampaIoT.TankBot.Core
             RightCommand = RelayCommand.Create(SendCommand, Commands.Right);
             ResetCommand = RelayCommand.Create(SendCommand, Commands.Reset);
 
-            _sensorRefreshTimer = Services.TimerFactory.Create(TimeSpan.FromMilliseconds(500));
+            _sensorRefreshTimer = new Timer(_sensorRefreshTimer_Tick, null, Timeout.Infinite, Timeout.Infinite);
 
             FirmwareVersion = UNKOWN_VERSION;
         }
@@ -85,12 +87,8 @@ namespace TampaIoT.TankBot.Core
 
         public void StartSensorRefreshTimer()
         {
-            if (_sensorRefreshTimer != null)
-            {
-                _sensorRefreshTimer.Interval = TimeSpan.FromMilliseconds(500);
-                _sensorRefreshTimer.Tick += _sensorRefreshTimer_Tick;
-                StartRefreshTimer();
-            }
+            _sensorTimeEnabled = true;
+            _sensorRefreshTimer.Change(0, 1000);            
         }
 
         protected abstract void RefreshSensors();
@@ -98,9 +96,12 @@ namespace TampaIoT.TankBot.Core
         protected abstract void SpeedUpdated(short speed);
 
 
-        private void _sensorRefreshTimer_Tick(object sender, object e)
+        private void _sensorRefreshTimer_Tick(object state)
         {
-            RefreshSensors();
+            if (_sensorTimeEnabled)
+            {
+                RefreshSensors();
+            }
         }
 
         private short _speed = 100;
@@ -127,12 +128,14 @@ namespace TampaIoT.TankBot.Core
 
         public void PauseRefreshTimer()
         {
-            _sensorRefreshTimer.Stop();
+            _sensorTimeEnabled = false;
+            _sensorRefreshTimer.Change(0, Timeout.Infinite);
         }
 
         public void StartRefreshTimer()
         {
-            _sensorRefreshTimer.Start();
+            _sensorTimeEnabled = true;
+            _sensorRefreshTimer.Change(0, 1000);
         }
 
         private String _apiMode = "Uknown/Not Connected";

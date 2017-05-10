@@ -19,7 +19,7 @@
                 <Setter Property="Width" Value="64" />
                 <Setter Property="FontSize" Value="64" />
                 <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Foreground" Value="Red" />
+                <Setter Property="Foreground" Value="#007fff" />
                 <Setter Property="Height" Value="64" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>

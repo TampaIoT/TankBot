@@ -24,7 +24,7 @@ namespace TampaIoT.TankBot.Core.Interfaces
 
         void Reset();
 
-        SensorData SensorData { get; set; }
+        int FrontSonar { get; }
 
         DateTime? LastBotContact { get; set; }
     }

@@ -3,8 +3,10 @@
 <Package
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  xmlns:uap4="http://schemas.microsoft.com/appx/manifest/uap/windows10/4"  
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-  IgnorableNamespaces="uap mp">
+  IgnorableNamespaces="uap mp rescap uap4">
 
   <Identity
     Name="dc8d16ae-4b36-4d7e-a351-11bdbfc7a7c1"
@@ -40,10 +42,29 @@
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
+      <Extensions>
+        <uap:Extension Category="windows.appService" EntryPoint="TampaIoT.TankBot.Firmware.PortalProvider">
+          <uap:AppService Name="com.tampiot.tankbot.portalprovider" />
+        </uap:Extension>
+        <uap4:Extension Category="windows.devicePortalProvider">
+          <uap4:DevicePortalProvider
+              DisplayName="Tampa IoT Tank Bot"
+              AppServiceName="com.tampiot.tankbot.portalprovider"
+              HandlerRoute="/tampaiottankbot/api/" />
+        </uap4:Extension>
+      </Extensions>
     </Application>
   </Applications>
 
   <Capabilities>
     <Capability Name="internetClient" />
+    <Capability Name="privateNetworkClientServer" />
+    <Capability Name="internetClientServer" />
+    <rescap:Capability Name="devicePortalProvider" />
+    <DeviceCapability Name="serialcommunication">
+      <Device Id="any">
+        <Function Type="name:serialPort" />
+      </Device>
+    </DeviceCapability>
   </Capabilities>
 </Package>

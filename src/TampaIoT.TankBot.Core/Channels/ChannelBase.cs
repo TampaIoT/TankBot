@@ -44,6 +44,12 @@ namespace TampaIoT.TankBot.Core.Channels
             }
         }
 
+
+        public bool IsRemote { get { return ChannelType == ChannelTypes.Remote; } }
+
+        public bool IsLocal { get { return ChannelType == ChannelTypes.Local; } }
+
+
         public void RaiseNetworkMessageReceived(NetworkMessage message)
         {
             NetworkMessageReceived?.Invoke(this, message);

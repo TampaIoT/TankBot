@@ -5,12 +5,16 @@
     xmlns:local="using:TampaIoT.TankBot.UWP.Core.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-     xmlns:fa="using:FontAwesome.UWP"
+    xmlns:fa="using:FontAwesome.UWP"
+    xmlns:cvts="using:TampaIoT.TankBot.UWP.Core.Converters"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="300">
-
+    <UserControl.Resources>
+        <cvts:IRColorConverter x:Key="IRColorConverter" />
+    </UserControl.Resources>
     <Grid>
+        
         <Grid.Resources>
             <Style TargetType="fa:FontAwesome">
                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -32,28 +36,29 @@
             <ColumnDefinition Width="33*" />
         </Grid.ColumnDefinitions>
 
-        <fa:FontAwesome Icon="ChevronCircleLeft" FontSize="64" HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+        <fa:FontAwesome Icon="ChevronCircleLeft" FontSize="64" HorizontalAlignment="Right" VerticalAlignment="Bottom" Foreground="{Binding FrontLeftIR, Converter={StaticResource IRColorConverter}}" >
             <fa:FontAwesome.RenderTransform>
                 <RotateTransform Angle="45" CenterX="32" CenterY="32" />
             </fa:FontAwesome.RenderTransform>
         </fa:FontAwesome>
-        <fa:FontAwesome Icon="ChevronCircleLeft" FontSize="64" Grid.Row="1" />
 
-        <fa:FontAwesome Icon="ChevronCircleLeft" FontSize="64" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="2" >
+        <fa:FontAwesome Icon="ChevronCircleLeft" FontSize="64" Grid.Row="1" Foreground="{Binding LeftIR, Converter={StaticResource IRColorConverter}}" />
+
+        <fa:FontAwesome Icon="ChevronCircleLeft" FontSize="64" HorizontalAlignment="Right" VerticalAlignment="Top" Grid.Row="2" Foreground="{Binding RearLeftIR, Converter={StaticResource IRColorConverter}}">
             <fa:FontAwesome.RenderTransform>
                 <RotateTransform Angle="-45" CenterX="32" CenterY="32" />
             </fa:FontAwesome.RenderTransform>
         </fa:FontAwesome>
 
-        <fa:FontAwesome FontSize="64" Grid.Column="1" Grid.Row="0" Icon="ChevronCircleUp" />
-        <fa:FontAwesome FontSize="64" Icon="ChevronCircleDown" Grid.Column="1" Grid.Row="2" />
-        <fa:FontAwesome  FontSize="64" HorizontalAlignment="Left" VerticalAlignment="Bottom" Icon="ChevronCircleUp" Grid.Column="2" Grid.Row="0" >
+        <fa:FontAwesome FontSize="64" Grid.Column="1" Grid.Row="0" Icon="ChevronCircleUp" Foreground="{Binding FrontIR, Converter={StaticResource IRColorConverter}}" />
+        <fa:FontAwesome FontSize="64" Icon="ChevronCircleDown" Grid.Column="1" Grid.Row="2" Foreground="{Binding RearIR, Converter={StaticResource IRColorConverter}}" />
+        <fa:FontAwesome  FontSize="64" HorizontalAlignment="Left" VerticalAlignment="Bottom" Icon="ChevronCircleUp" Grid.Column="2" Grid.Row="0" Foreground="{Binding FrontRightIR, Converter={StaticResource IRColorConverter}}">
             <fa:FontAwesome.RenderTransform>
                 <RotateTransform Angle="45" CenterX="32" CenterY="32" />
             </fa:FontAwesome.RenderTransform>
         </fa:FontAwesome>
-        <fa:FontAwesome  FontSize="64" Icon="ChevronCircleRight" Grid.Column="2" Grid.Row="1" />
-        <fa:FontAwesome  FontSize="64" Icon="ChevronCircleRight" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <fa:FontAwesome  FontSize="64" Icon="ChevronCircleRight" Grid.Column="2" Grid.Row="1" Foreground="{Binding RightIR, Converter={StaticResource IRColorConverter}}" />
+        <fa:FontAwesome  FontSize="64" Icon="ChevronCircleRight" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="{Binding RearRightIR, Converter={StaticResource IRColorConverter}}">
             <fa:FontAwesome.RenderTransform>
                 <RotateTransform Angle="45" CenterX="32" CenterY="32" />
             </fa:FontAwesome.RenderTransform>

@@ -15,7 +15,7 @@ namespace TampaIoT.TankBot.App.ViewModels
         IJoyStick _joyStick;
         public TankBotClientBase(IJoyStick joyStick)
         {
-            MoveCommand = new RelayCommand((param) => Move((short)param));
+            MoveCommand = new RelayCommand((param) => Move(Convert.ToInt16(param)));
             StopCommand = new RelayCommand(Stop);
             _joyStick = joyStick;
 
@@ -24,7 +24,8 @@ namespace TampaIoT.TankBot.App.ViewModels
 
         private void _joyStick_JoyStickUpdated(object sender, Windows.Foundation.Point e)
         {
-            throw new NotImplementedException();
+            JoystickDisplayX = e.X * 100;
+            JoystickDisplayY = (-e.Y * 100);
         }
 
         private void _networkChannel_Disconnected(object sender, string e)
@@ -45,7 +46,14 @@ namespace TampaIoT.TankBot.App.ViewModels
         public SensorData SensorData
         {
             get { return _sensorData; }
-            set { Set(ref _sensorData, value); }
+            set
+            {
+                _sensorData = value;
+                DispatcherServices.Invoke(() =>
+                {
+                    RaisePropertyChanged();
+                });
+            }
         }
 
         bool _isConnected;
@@ -62,5 +70,27 @@ namespace TampaIoT.TankBot.App.ViewModels
             set { Set(ref _speed, value); }
         }
 
+
+        private double _joyStickDisplayX = 100;
+        public double JoystickDisplayX
+        {
+            get { return _joyStickDisplayX; }
+            set
+            {
+                /* Add 100 to center it in the control */
+                Set(ref _joyStickDisplayX, value + 100);
+            }
+        }
+
+
+        private double _joyStickDisplayY = 100;
+        public double JoystickDisplayY
+        {
+            get { return _joyStickDisplayY; }
+            set
+            {     /* Add 100 to center it in the control */
+                Set(ref _joyStickDisplayY, value + 100);
+            }
+        }
     }
 }

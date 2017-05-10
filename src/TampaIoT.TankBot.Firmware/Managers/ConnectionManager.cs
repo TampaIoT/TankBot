@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TampaIoT.TankBot.Core;
 using TampaIoT.TankBot.Core.Interfaces;
 using TampaIoT.TankBot.Firmware.Api;
 using TampaIoT.TankBot.Firmware.Networking;
@@ -25,6 +26,7 @@ namespace TampaIoT.TankBot.Firmware.Managers
         string _tankBotName;
         int _webServerPort;
         int _tcpListenerPort;
+        int _uPnPListenerPort;
         string _deviceName;
 
         static ConnectionManager _instance = new ConnectionManager();
@@ -36,7 +38,7 @@ namespace TampaIoT.TankBot.Firmware.Managers
 <link rel=""stylesheet"" href=""https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"" integrity=""sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"" crossorigin=""anonymous"">
 </head>
 <body>
-<h1>" + _deviceName + @" Soccer Bot Api Page</h1>
+<h1>" + _deviceName + @" TankBot Api Page</h1>
 <h2>Tampa IoT Society</h2> 
 <h2>Status: " + message + @"</h2> 
 <h3>API Mode: " + _tankBot.APIMode + @"</h3>
@@ -76,14 +78,15 @@ namespace TampaIoT.TankBot.Firmware.Managers
                 StartTCPServer(_tcpListenerPort, _tankBot, _sensorManager);
             }
             else
-            {
+            {                
                 _tcpServer.Stop();
+                _tcpServer = null;
                 //TODO: Need to test dropping and reconnecting with TCP Server and Web Server.
             }
         }
 
 
-        public void Start(String tankBotName, ITankBot tankBot, ITankBotLogger logger, ISensorManager sensorManager, int webServerPort, int tcpListenerPort)
+        public void Start(String tankBotName, ITankBot tankBot, ITankBotLogger logger, ISensorManager sensorManager, int webServerPort, int tcpListenerPort, int uPnPListenerPort)
         {
             _logger = logger;
             _tankBotName = tankBotName;
@@ -91,6 +94,7 @@ namespace TampaIoT.TankBot.Firmware.Managers
             _sensorManager = sensorManager;
             _webServerPort = webServerPort;
             _tcpListenerPort = tcpListenerPort;
+            _uPnPListenerPort = uPnPListenerPort;
 
             var networkInfo = Windows.Networking.Connectivity.NetworkInformation.GetInternetConnectionProfile();
             App.TheApp.HasInternetConnection = networkInfo.GetNetworkConnectivityLevel() == Windows.Networking.Connectivity.NetworkConnectivityLevel.InternetAccess;
@@ -105,46 +109,69 @@ namespace TampaIoT.TankBot.Firmware.Managers
         
         private void MakeDiscoverable(string name)
         {
-            var _configuration = new UPNPConfiguration()
+            if (_ssdpServer == null)
             {
-                UdpListnerPort = 1900,
-                FriendlyName = name,
-                Manufacture = "Tampa IoT Dev",
-                ModelName = "SoccerBot-mBot",
-                DefaultPageHtml = @"<html>
+                var _configuration = new UPNPConfiguration()
+                {
+                    UdpListnerPort = _uPnPListenerPort,
+                    FriendlyName = name,
+                    Manufacture = "Tampa IoT Dev",
+                    ModelName = Constants.TankBotModelName,
+                    DefaultPageHtml = @"<html>
 <head>
 <title>SoccerBot</title>
 <link rel=""stylesheet"" href=""https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"" integrity=""sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"" crossorigin=""anonymous"">
 </head>
 <body>
-<h1>Soccer Bot SSDP (uPnP) Listener Page</h1>
+<h1>Tampa IoT TankBot SSDP (uPnP) Listener Page</h1>
 </body>
 </html>"
-            };
+                };
 
-            _ssdpServer = NetworkServices.GetSSDPServer();
-            _ssdpServer.MakeDiscoverable(9500, _configuration);
+                try
+                {
+                    _ssdpServer = NetworkServices.GetSSDPServer();
+                    _ssdpServer.MakeDiscoverable(9500, _configuration);
+                }
+                catch(Exception ex)
+                {
+                    _logger.NotifyUserError("ConnectionManager_MakeDiscoverable", ex.Message);
+                }
+            }
         }
 
         private void StartWebServer(int port, string name)
         {
             _deviceName = name;
 
-            _webServer = NetworkServices.GetWebServer();
-            _webServer.RegisterAPIHandler(new MotionRestAPI(_tankBot, _logger));
-            _webServer.RegisterAPIHandler(new MotionController(this, _logger));
-            _webServer.DefaultPageHtml = GetDefaultPageHTML("Ready");
-            _webServer.StartServer(port);
+            try
+            {
+                _webServer = NetworkServices.GetWebServer();
+                _webServer.RegisterAPIHandler(new MotionRestAPI(_tankBot, _logger));
+                _webServer.RegisterAPIHandler(new MotionController(this, _logger));
+                _webServer.DefaultPageHtml = GetDefaultPageHTML("Ready");
+                _webServer.StartServer(port);
+            }
+            catch(Exception ex)
+            {
+                _logger.NotifyUserError("ConnectionManager_StartWebServer", ex.Message);
+            }
         }
 
         private void StartTCPServer(int port, ITankBot soccerBot, ISensorManager sensorManager)
         {
-            _tcpServer = new Server(_logger, port, soccerBot, sensorManager);
-            _tcpServer.Start();
+            try
+            {
+                _tcpServer = new Server(_logger, port, soccerBot, sensorManager);
+                _tcpServer.Start();
+            }
+            catch(Exception ex)
+            {
+                _logger.NotifyUserError("ConnectionManager_StartTCPServer", ex.Message);
+            }
         }
 
         public IEnumerable<IClient> Clients { get { return _tcpServer.Clients.Values; } }
-
 
         public ITankBot TankBot { get { return _tankBot; } }
         public ISensorManager SensorManager { get { return _sensorManager; } }

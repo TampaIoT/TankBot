@@ -60,5 +60,7 @@ namespace TampaIoT.TankBot.Core.Messages
         public ISensor RearRightIR { get; set; }
         public ISensor RearIR { get; set; }
         public ISensor RearLeftIR { get; set; }
+
+        public bool MBotConnected { get; set; }
     }
 }

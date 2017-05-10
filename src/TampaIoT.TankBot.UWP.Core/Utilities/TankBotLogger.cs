@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using TampaIoT.TankBot.Core.Interfaces;
 using TampaIoT.TankBot.Core.Models;
 
@@ -16,6 +17,8 @@ namespace TampaIoT.TankBot.UWP.Core.Utilities
 
         public void NotifyUserInfo(Notification notification)
         {
+            Debug.WriteLine($"{notification.Level} - {notification.Source} - {notification.Message}.");
+
             LagoVista.Core.PlatformSupport.Services.DispatcherServices.Invoke(() =>
             {
                 Notifications.Insert(0, notification);

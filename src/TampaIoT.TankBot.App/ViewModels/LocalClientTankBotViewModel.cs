@@ -9,7 +9,6 @@ namespace TampaIoT.TankBot.App.ViewModels
         private ITankBot _mblockTankBot;
 
         ITankBotLogger _logger;
-        IJoyStick _joyStick;
         IChannel _channel;
       
         public LocalClientTankBotViewModel(IChannel channel, ITankBotLogger logger, IJoyStick joyStick) : base(joyStick)

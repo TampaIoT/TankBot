@@ -25,7 +25,6 @@ namespace TampaIoT.TankBot.UWP.Core.Channels
         {
             
         }
-
         public override Task<bool> ConnectAsync()
         {
             return Task.FromResult(true);

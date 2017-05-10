@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using TampaIoT.TankBot.Core;
 using TampaIoT.TankBot.Core.Channels;
 using TampaIoT.TankBot.Core.Interfaces;
 using TampaIoT.TankBot.Core.Messages;
@@ -33,7 +34,7 @@ namespace TampaIoT.TankBot.UWP.Core.Channels
 
         MessageParser _parser;
 
-        public override ChannelTypes ChannelType => ChannelTypes.Local;
+        public override ChannelTypes ChannelType => ChannelTypes.Remote;
 
         ITankBotLogger _logger;
         public TCPIPChannel(uPnPDevice device, ITankBotLogger logger)
@@ -50,7 +51,7 @@ namespace TampaIoT.TankBot.UWP.Core.Channels
 
         private void _parser_MessageReady(object sender, NetworkMessage e)
         {
-            _logger.NotifyUserInfo("Client_MessageReceived", "Message Received");
+            _logger.NotifyUserInfo("Client_MessageReceived", $"Message Received - {e.MessageTypeCode}");
 
             RaiseNetworkMessageReceived(e);
         }
@@ -60,7 +61,6 @@ namespace TampaIoT.TankBot.UWP.Core.Channels
             _cancelListenerSource = new CancellationTokenSource();
             _listenerTask = new Task(async () =>
             {
-
                 var running = true;
                 while (running)
                 {
@@ -102,8 +102,7 @@ namespace TampaIoT.TankBot.UWP.Core.Channels
 
                 _socket = new Windows.Networking.Sockets.StreamSocket();
                 var host = new Windows.Networking.HostName(_remoteDevice.IPAddress);
-                var port = 9000;
-                await _socket.ConnectAsync(host, port.ToString());
+                await _socket.ConnectAsync(host, Constants.TCPListenPort.ToString());
 
                 _inputStream = _socket.InputStream.AsStreamForRead();
                 _reader = new StreamReader(_inputStream);
@@ -140,8 +139,14 @@ namespace TampaIoT.TankBot.UWP.Core.Channels
                 _pingTimer.Change(Timeout.Infinite, Timeout.Infinite);
                 _pingTimer.Dispose();
                 _pingTimer = null;
+                _logger.NotifyUserError("TCPIPChannel_Disconnecting", "Disconnect_Timer Not Null");
+            }
+            else
+            {
+                _logger.NotifyUserError("TCPIPChannel_Disconnecting","Disconnect_Timer Null");
             }
 
+            InvokeDisconnected();
             _cancelListenerSource.Cancel();
         }
 

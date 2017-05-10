@@ -157,7 +157,7 @@ namespace TampaIoT.TankBot.Firmware.Sensors
                 RawY.Value = hY.ToString();
                 RawY.IsOnline = true;
 
-                Debug.WriteLine($"Angle={Value}");
+                //Debug.WriteLine($"Angle={Value}");
             }
             catch (Exception ex)
             {

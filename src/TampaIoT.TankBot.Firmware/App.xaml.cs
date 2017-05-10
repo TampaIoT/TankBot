@@ -17,6 +17,7 @@ using TampaIoT.TankBot.Core.Simulators;
 using Windows.Networking;
 using TampaIoT.TankBot.Firmware.Networking;
 using TampaIoT.TankBot.Firmware.Managers;
+using TampaIoT.TankBot.Core;
 
 namespace TampaIoT.TankBot.Firmware
 {
@@ -41,7 +42,17 @@ namespace TampaIoT.TankBot.Firmware
             this.InitializeComponent();
             this.Suspending += OnSuspending;
 
+            this.UnhandledException += App_UnhandledException;
             _app = this;
+        }
+
+        private void App_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Debug.WriteLine("Unhandled Exception");
+            Debug.WriteLine("====================================================");
+            Debug.WriteLine(e.Message);
+            Debug.WriteLine(e.Exception.StackTrace);
+            Debug.WriteLine("====================================================");
         }
 
         public static App TheApp { get { return _app; } }
@@ -65,6 +76,8 @@ namespace TampaIoT.TankBot.Firmware
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
 
+                LagoVista.Core.UWP.Services.UWPDeviceServices.Init(rootFrame.Dispatcher);
+
                 InitSockerBot();
 
                 Window.Current.Activate();
@@ -86,9 +99,9 @@ namespace TampaIoT.TankBot.Firmware
                 await LagoVista.Core.PlatformSupport.Services.Storage.StoreKVP("PIN", pin);
             }
 
-            Debug.Write("========================================");
-            Debug.Write("NOTE: NOTE: NOTE: Your PIN is: " + pin);
-            Debug.Write("========================================");
+            Debug.WriteLine("========================================");
+            Debug.WriteLine("NOTE: NOTE: NOTE: Your PIN is: " + pin);
+            Debug.WriteLine("========================================");
 
             _logger = new Loggers.DebugLogger();
 
@@ -119,7 +132,7 @@ namespace TampaIoT.TankBot.Firmware
                     break;
             }
 
-            ConnectionManager.Start(computerName, _tankBot, _logger, _sensorManager, 80, 9001);
+            ConnectionManager.Start(computerName, _tankBot, _logger, _sensorManager, Constants.WebListenerPort, Constants.TCPListenPort, Constants.UPNPListenPort);
         }
 
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)

@@ -5,8 +5,15 @@
     xmlns:local="using:TampaIoT.TankBot.App"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:vms="using:TampaIoT.TankBot.App.ViewModels"
+      xmlns:cvts="using:TampaIoT.TankBot.App.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Page.Resources>
+        <cvts:NotNullVisibilityConverter x:Key="NotNullVisibilityConverter" />
+        <cvts:NullVisibilityConverter x:Key="NullVisibilityConverter" />
+        <cvts:BoolVisibilityConverter x:Key="BoolVisibilityConverter" />
+    </Page.Resources>
+
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
         <Grid >
@@ -15,38 +22,63 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <CommandBar>
-                <AppBarButton Icon="Add" Command="{Binding TogglePaneVisibilityCommand}">
-                </AppBarButton>
+                <AppBarButton Icon="Add" Command="{Binding TogglePaneVisibilityCommand}"/>
             </CommandBar>
             <SplitView IsPaneOpen="{Binding IsPaneOpen}" Grid.Row="1">
                 <SplitView.Content>
                     <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
+                        <Grid Visibility="{Binding ClientTankBotViewModel, Converter={StaticResource NotNullVisibilityConverter}}">
+                            <Grid DataContext="{Binding ClientTankBotViewModel}" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
 
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding CurrentChannel.DeviceName}" />
-                        <my:Movement Width="300" Height="300" />
-                        <my:Compass Grid.Column="1" />
-                        <my:SensorArray Grid.Row="1" Width="300" Height="300" />
-                        <my:Sonar Grid.Row="1" Grid.Column="1" />
-                        <my1:JoyStick Grid.Row="2" Grid.ColumnSpan="2" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding CurrentChannel.DeviceName}" />
+                                <my:Movement Width="300" Height="300" />
+                                <my:Compass Grid.Column="1" />
+                                <my:SensorArray DataContext="{Binding SensorData}" Grid.Row="1" Width="300" Height="300" />
+                                <my:Sonar Grid.Row="1" Grid.Column="1" />
+                                <my1:JoyStick Grid.Row="2" Grid.ColumnSpan="2" />
+                            </Grid>
+                        </Grid>
+                        <Grid Visibility="{Binding ClientTankBotViewModel, Converter={StaticResource NullVisibilityConverter}}">
+                            <TextBlock Text="{Binding Message}" HorizontalAlignment="Center" VerticalAlignment="Center"  Margin="0,-100,0,0"  FontSize="32"/>
+                            <Button Content="Search For TankBots" Command="{Binding SearchCommand}" Background="#007FFF" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="32" Margin="0,100,0,0"/>
+                        </Grid>
                     </Grid>
                 </SplitView.Content>
                 <SplitView.Pane>
                     <Grid>
-                        <ListView SelectedItem="{Binding CurrentChannel, Mode=TwoWay}" ItemsSource="{Binding Path=SearchVM.AvailableChannels}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <CommandBar>
+                            <AppBarButton Icon="Refresh" Command="{Binding SearchVM.RefreshCommand}"/>
+                        </CommandBar>
+                        <ListView SelectedItem="{Binding CurrentChannel, Mode=TwoWay}" ItemsSource="{Binding Path=SearchVM.AvailableChannels}" Grid.Row="1">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
-                                        <TextBlock Text="{Binding DeviceName}" />
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                        </Grid.RowDefinitions>
+                                        <Image Source="/Assets/Bluetooth.png" Grid.RowSpan="2"  Visibility="{Binding IsLocal, Converter={StaticResource BoolVisibilityConverter}}" Grid.Column="0" Width="48" Height="48" />
+                                        <Image Source="/Assets/WiFi.png" Grid.RowSpan="2"  Visibility="{Binding IsRemote, Converter={StaticResource BoolVisibilityConverter}}" Grid.Column="0" Width="48" Height="48" />
+                                        <TextBlock Text="{Binding DeviceName}" Grid.Column="1" />
+                                        <TextBlock Text="{Binding Id}" Grid.Column="1" Grid.Row="2" />
                                     </Grid>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
