@@ -2,22 +2,23 @@
 using System.Linq;
 using System.Collections.Generic;
 using Windows.Networking.Sockets;
-using System.Diagnostics;
 using LagoVista.Core.Models.Drawing;
 using TampaIoT.TankBot.Core.Interfaces;
 using TampaIoT.TankBot.Firmware.Sensors;
 using TampaIoT.TankBot.Core.Models;
 using TampaIoT.TankBot.Core.Messages;
+using System.Collections.Concurrent;
+using System.Threading;
 
 namespace TampaIoT.TankBot.Firmware.Networking
 {
-    public class Server
+    public class Server : IServer
     {
         ITankBotLogger _logger;
         ITankBot _soccerBot;
-        SensorManager _sensorManager;
-        List<Client> _clients;
-        TCPListener _listener;
+        ISensorManager _sensorManager;
+        ConcurrentDictionary<String, IClient> _clients;
+        ITCPListener _listener;
 
         System.Threading.Timer _watchDog;
         System.Threading.Timer _sensorUpdateTimer;
@@ -26,7 +27,7 @@ namespace TampaIoT.TankBot.Firmware.Networking
         Object _clientAccessLocker = new object();
 
 
-        public Server(ITankBotLogger logger, int port, ITankBot soccerBot, SensorManager sensorManager)
+        public Server(ITankBotLogger logger, int port, ITankBot soccerBot, ISensorManager sensorManager)
         {
             _port = port;
             _logger = logger;
@@ -34,7 +35,7 @@ namespace TampaIoT.TankBot.Firmware.Networking
 
             _sensorManager = sensorManager;
 
-            _clients = new List<Client>();
+            _clients = new ConcurrentDictionary<string, IClient>();
 
             _watchDog = new System.Threading.Timer(_watchDog_Tick, null, 0, 2500);
             _sensorUpdateTimer = new System.Threading.Timer(_sensorUpdateTimer_Tick, null, 0, 1000);
@@ -54,10 +55,10 @@ namespace TampaIoT.TankBot.Firmware.Networking
                 _listener = null;
             }
 
-            foreach(var client in _clients)
+            foreach (var client in _clients)
             {
-                client.Disconnect();
-                client.Dispose();
+                client.Value.Disconnect();
+                client.Value.Dispose();
             }
 
             _clients.Clear();
@@ -69,68 +70,50 @@ namespace TampaIoT.TankBot.Firmware.Networking
             {
                 Version = _soccerBot.FirmwareVersion,
                 DeviceName = _soccerBot.DeviceName,
-                FrontSonar = _sensorManager.FrontSonar,
-                Compass = _sensorManager.Compass,
-                CompassRawX = _sensorManager.Compass.RawX,
-                CompassRawY = _sensorManager.Compass.RawY,
-
-                RightIR = _sensorManager.SensorArray.Right,
-
-                FrontRightIR = _sensorManager.SensorArray.FrontRight,
-                FrontIR = _sensorManager.SensorArray.Front,
-                FrontLeftIR = _sensorManager.SensorArray.FrontLeft,
-
-                LeftIR = _sensorManager.SensorArray.Left,
-
-                RearRightIR = _sensorManager.SensorArray.RearRight,
-                RearIR = _sensorManager.SensorArray.Rear,
-                RearLeftIR = _sensorManager.SensorArray.RearLeft
             };
 
+            _sensorManager.UpdateSensorData(sensorMessage);
+
             var msg = NetworkMessage.CreateJSONMessage(sensorMessage, Core.Messages.SensorData.MessageTypeId);
-            var connectedClients = _clients.Where(clnt => clnt.IsConnected == true).ToList();
+            var connectedClients = _clients.Where(clnt => clnt.Value.IsConnected == true).ToList();
 
             foreach (var client in connectedClients)
             {
-                await client.Write(msg.GetBuffer());
+                await client.Value.Write(msg.GetBuffer());
             }
         }
-        
+
+
         private void _watchDog_Tick(object state)
         {
-            var clientsToRemove = new List<Client>();
+            var clientsToRemove = new List<IClient>();
             foreach (var client in _clients)
             {
-                if (client.IsConnected == false)
-                    clientsToRemove.Add(client);
+                if (client.Value.IsConnected == false)
+                    clientsToRemove.Add(client.Value);
             }
 
+            /* Run if a client has dropped */
             if (clientsToRemove.Count > 0 && _clients.Count > 0)
             {
+                /* If we only have one client left, turn LEDs red */
                 if (_clients.Count == 1)
                 {
-                    if (_soccerBot.LastBotContact.HasValue && ((DateTime.Now - _soccerBot.LastBotContact) < TimeSpan.FromSeconds(10)))
-                    {
-                        _soccerBot.SetLED(0, NamedColors.Yellow);
-                    }
-                    else
-                        _soccerBot.SetLED(0, NamedColors.Red);
+                    _soccerBot.SetLED(0, NamedColors.Red);
                 }
+
+                /* Play tone if client dropped */
                 _soccerBot.PlayTone(200);
             }
 
             foreach (var client in clientsToRemove)
             {
-                try
+                if (_clients.TryRemove(client.Id, out IClient removedClient))
                 {
-                    _clients.Remove(client);
                     client.Disconnect();
                     client.Dispose();
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.Message);
-                }
+                /* else - if this fails it will just be picke up next time */
             }
         }
 
@@ -143,7 +126,17 @@ namespace TampaIoT.TankBot.Firmware.Networking
             {
                 var client = Client.Create(socket, _logger);
                 client.MessageRecevied += Client_MessageRecevied;
-                _clients.Add(client);
+                int attempts = 0;
+                while(!_clients.TryAdd(client.Id,client) && attempts++ < 5)
+                {
+                    SpinWait.SpinUntil(() => false, 5);
+                }
+
+                if(attempts == 5)
+                {
+                    _logger.NotifyUserError("Server_ClientConnected", "Could not add client after 5 attempts.");
+                }
+
                 client.StartListening();
             }
         }
@@ -162,6 +155,9 @@ namespace TampaIoT.TankBot.Firmware.Networking
                     _soccerBot.Stop();
                     break;
             }
-        }       
+        }
+
+        public ConcurrentDictionary<String, IClient> Clients { get { return _clients; } }
+
     }
 }

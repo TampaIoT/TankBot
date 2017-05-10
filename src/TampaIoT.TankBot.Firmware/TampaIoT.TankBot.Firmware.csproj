@@ -97,21 +97,29 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Networking\Client.cs" />
-    <Compile Include="Networking\Server.cs" />
-    <Compile Include="Networking\TCPListener.cs" />
     <Compile Include="Filters\MedianFilter.cs" />
     <Compile Include="Loggers\DebugLogger.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Managers\ConnectionManager.cs" />
+    <Compile Include="Managers\IConnectionManager.cs" />
+    <Compile Include="Networking\Client.cs" />
+    <Compile Include="Networking\IClient.cs" />
+    <Compile Include="Networking\IServer.cs" />
+    <Compile Include="Networking\ITCPListener.cs" />
+    <Compile Include="Networking\Server.cs" />
+    <Compile Include="Networking\TCPListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sensors\Compass5983.cs" />
     <Compile Include="Sensors\IRProximitySensor.cs" />
     <Compile Include="Sensors\IRProximitySensorArray.cs" />
+    <Compile Include="Sensors\ISensorManager.cs" />
+    <Compile Include="Sensors\SensorBase.cs" />
     <Compile Include="Sensors\SensorManager.cs" />
     <Compile Include="Sensors\Sonar.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="_connectionManager\Clients.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

@@ -167,6 +167,11 @@ namespace TampaIoT.TankBot.UWP.Core.Channels
             }
         }
 
+        public Task SendAsync(NetworkMessage msg)
+        {
+            return WriteBuffer(msg.GetBuffer());
+        }
+
         public void Dispose()
         {
             lock (this)

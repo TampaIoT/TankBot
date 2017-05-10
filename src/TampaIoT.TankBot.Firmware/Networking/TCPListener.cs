@@ -1,17 +1,18 @@
 ﻿using System;
 using TampaIoT.TankBot.Core.Interfaces;
+using Windows.Networking.Sockets;
 
 namespace TampaIoT.TankBot.Firmware.Networking
 {
-    public class TCPListener : IDisposable
+    public class TCPListener : IDisposable, ITCPListener
     {
-        Windows.Networking.Sockets.StreamSocketListener _listener;
+        StreamSocketListener _listener;
 
-        Server _server;
+        IServer _server;
         ITankBotLogger _logger;
         int _port;
 
-        public TCPListener(ITankBotLogger logger, Server server, int port)
+        public TCPListener(ITankBotLogger logger, IServer server, int port)
         {
             _server = server;
             _logger = logger;
@@ -23,7 +24,7 @@ namespace TampaIoT.TankBot.Firmware.Networking
         {
             try
             {
-                _listener = new Windows.Networking.Sockets.StreamSocketListener();
+                _listener = new StreamSocketListener();
                 _listener.ConnectionReceived += _listener_ConnectionReceived;
 
                 _logger.NotifyUserInfo("TCPIP Listener", $"Started Listening on Port {_port}");
@@ -40,7 +41,7 @@ namespace TampaIoT.TankBot.Firmware.Networking
             }
         }
 
-        private void _listener_ConnectionReceived(Windows.Networking.Sockets.StreamSocketListener sender, Windows.Networking.Sockets.StreamSocketListenerConnectionReceivedEventArgs args)
+        private void _listener_ConnectionReceived(StreamSocketListener sender, StreamSocketListenerConnectionReceivedEventArgs args)
         {
             _server.ClientConnected(args.Socket);
         }

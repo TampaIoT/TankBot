@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TampaIoT.TankBot.App.Controllers;
 using TampaIoT.TankBot.Core.Interfaces;
 using TampaIoT.TankBot.UWP.Core.Utilities;
 using Windows.ApplicationModel;
@@ -26,6 +27,7 @@ namespace TampaIoT.TankBot.App
     sealed partial class App : Application
     {
         public static App _theApp;
+        XBoxController _joystick;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -53,6 +55,8 @@ namespace TampaIoT.TankBot.App
 
         public static App TheApp { get { return _theApp; } }
 
+        public IJoyStick JoyStick { get { return _joystick; } }
+
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used such as when the application is launched to open a specific file.
@@ -77,6 +81,8 @@ namespace TampaIoT.TankBot.App
                 }
 
                 LagoVista.Core.UWP.Services.UWPDeviceServices.Init(rootFrame.Dispatcher);
+
+                _joystick = new XBoxController();
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;

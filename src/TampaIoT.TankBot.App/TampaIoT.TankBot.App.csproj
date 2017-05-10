@@ -109,6 +109,7 @@
     <Compile Include="ViewModels\LocalClientTankBotViewModel.cs" />
     <Compile Include="ViewModels\SearchTankBotViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\TankBotClientBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

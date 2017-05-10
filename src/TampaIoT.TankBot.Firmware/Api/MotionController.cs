@@ -10,78 +10,78 @@ namespace TampaIoT.TankBot.Firmware.Api
     /// </summary>
     public class MotionController : IApiHandler
     {
-        ITankBot _tankBot;
         ITankBotLogger _logger;
+        IConnectionManager _connectionManager;
 
-        public MotionController(ITankBot tankBot, ITankBotLogger logger)
+        public MotionController(IConnectionManager connectionManager, ITankBotLogger logger)
         {
-            _tankBot = tankBot;
+            _connectionManager = connectionManager;
             _logger = logger;
         }
 
         [MethodHandler(MethodHandlerAttribute.MethodTypes.GET, FullPath = "/reset")]
         public HttpResponseMessage Reset(HttpRequestMessage msg)
         {
-            _tankBot.Reset();
+            _connectionManager.TankBot.Reset();
 
             var response = msg.GetResponseMessage();
             response.ContentType = "text/html";
-            response.Content = ConnectionManager.Instance.GetDefaultPageHTML("Ok - Resetting");
+            response.Content = _connectionManager.GetDefaultPageHTML("Ok - Resetting");
             return response;
         }
 
         [MethodHandler(MethodHandlerAttribute.MethodTypes.GET, FullPath = "/motion/forward/{speed}")]
         public HttpResponseMessage Forward(HttpRequestMessage msg, int speed)
         {
-            _tankBot.Move((short)speed, absoluteHeading: 0);
+            _connectionManager.TankBot.Move((short)speed, absoluteHeading: 0);
 
             var response = msg.GetResponseMessage();
             response.ContentType = "text/html";
-            response.Content = ConnectionManager.Instance.GetDefaultPageHTML("Ok - starting forward");
+            response.Content = _connectionManager.GetDefaultPageHTML("Ok - starting forward");
             return response;
         }
 
         [MethodHandler(MethodHandlerAttribute.MethodTypes.GET, FullPath = "/motion/left/{speed}")]
         public HttpResponseMessage Left(HttpRequestMessage msg, int speed)
         {
-            _tankBot.Move((short)speed, absoluteHeading: 270);
+            _connectionManager.TankBot.Move((short)speed, absoluteHeading: 270);
 
             var response = msg.GetResponseMessage();
             response.ContentType = "text/html";
-            response.Content = ConnectionManager.Instance.GetDefaultPageHTML("Ok - starting left");
+            response.Content = _connectionManager.GetDefaultPageHTML("Ok - starting left");
             return response;
         }
 
         [MethodHandler(MethodHandlerAttribute.MethodTypes.GET, FullPath = "/motion/right/{speed}")]
         public HttpResponseMessage Right(HttpRequestMessage msg, int speed)
         {
-            _tankBot.Move((short)speed, absoluteHeading: 90);
+            _connectionManager.TankBot.Move((short)speed, absoluteHeading: 90);
 
             var response = msg.GetResponseMessage();
             response.ContentType = "text/html";
-            response.Content = ConnectionManager.Instance.GetDefaultPageHTML("Ok - starting right");
+            response.Content = _connectionManager.GetDefaultPageHTML("Ok - starting right");
             return response;
         }
 
         [MethodHandler(MethodHandlerAttribute.MethodTypes.GET, FullPath = "/motion/backwards/{speed}")]
         public HttpResponseMessage Backwards(HttpRequestMessage msg, int speed)
         {
-            _tankBot.Move((short)speed, absoluteHeading: 180);
+            _connectionManager.TankBot.Move((short)speed, absoluteHeading: 180);
 
             var response = msg.GetResponseMessage();
             response.ContentType = "text/html";
-            response.Content = ConnectionManager.Instance.GetDefaultPageHTML("Ok - starting backwards");
+            response.Content = _connectionManager.GetDefaultPageHTML("Ok - starting backwards");
             return response;
         }
 
         [MethodHandler(MethodHandlerAttribute.MethodTypes.GET, FullPath = "/motion/stop")]
         public HttpResponseMessage Stop(HttpRequestMessage msg)
         {
-            _tankBot.Stop();
+            _connectionManager.TankBot.Stop();
 
             var response = msg.GetResponseMessage();
             response.ContentType = "text/html";
-            response.Content = ConnectionManager.Instance.GetDefaultPageHTML("Ok - stopping");
+            response.Content = _connectionManager.GetDefaultPageHTML("Ok - stopping");
             return response;
         }
     }

@@ -1,72 +1,40 @@
-﻿using LagoVista.Core.Commanding;
-using TampaIoT.TankBot.Core.Interfaces;
-using TampaIoT.TankBot.Core.Messages;
-using LagoVista.Core.ViewModels;
+﻿using TampaIoT.TankBot.Core.Interfaces;
 using TampaIoT.TankBot.App.Controllers;
+using System.Threading.Tasks;
 
 namespace TampaIoT.TankBot.App.ViewModels
 {
-    public class LocalClientTankBotViewModel : ViewModelBase, IClientTankBotViewModel
+    public class LocalClientTankBotViewModel : TankBotClientBase, IClientTankBotViewModel
     {
-        private mBlockTankBot _mblockTankBot;
+        private ITankBot _mblockTankBot;
+
         ITankBotLogger _logger;
         IJoyStick _joyStick;
-        int _direction;
-
-        public LocalClientTankBotViewModel(IChannel channel, ITankBotLogger logger, IJoyStick joyStick)
+        IChannel _channel;
+      
+        public LocalClientTankBotViewModel(IChannel channel, ITankBotLogger logger, IJoyStick joyStick) : base(joyStick)
         {
-            _mblockTankBot = new mBlockTankBot(channel, logger);
-            _joyStick = joyStick;
+            _channel = channel;
+             _mblockTankBot = new mBlockTankBot(channel, logger);
             _logger = logger;
-            _joyStick.JoyStickUpdated += _joyStick_JoyStickUpdated;
         }
-
-        private void _joyStick_JoyStickUpdated(object sender, Windows.Foundation.Point e)
-        {
-            
-        }
-
+        
         public ChannelTypes ChannelType { get { return ChannelTypes.Remote; } }
 
-        public void Move(int direction)
+        public override void Move(short direction)
         {
-            _direction = direction;
-
+            _mblockTankBot.Move(Speed, direction);
         }
 
-        public void Stop()
+        public override void Stop()
         {
             Speed = 0;
+            _mblockTankBot.Stop();
         }
 
-        bool _isConnected;
-        public bool IsConnected
+        public Task DisconnectAsync()
         {
-            get { return _isConnected; }
-            set { Set(ref _isConnected, value); }
-        }
-
-        private short _speed;
-        public short Speed
-        {
-            get { return _speed; }
-            set { Set(ref _speed, value); }
-        }
-
-        public RelayCommand MoveCommand { get; private set; }
-
-        public RelayCommand StopCommand { get; private set; }
-
-        SensorData _sensorData;
-        public SensorData SensorData
-        {
-            get { return _sensorData; }
-            set { Set(ref _sensorData, value); }
-        }
-
-        public void Disconnect()
-        {
-            
+            return _channel.DisconnectAsync();
         }
     }
 }

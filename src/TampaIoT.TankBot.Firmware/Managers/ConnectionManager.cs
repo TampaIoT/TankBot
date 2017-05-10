@@ -8,21 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 using TampaIoT.TankBot.Core.Interfaces;
 using TampaIoT.TankBot.Firmware.Api;
-using TampaIoT.TankBot.Firmware.Channels;
+using TampaIoT.TankBot.Firmware.Networking;
 using TampaIoT.TankBot.Firmware.Sensors;
 
 namespace TampaIoT.TankBot.Firmware.Managers
 {
-    public class ConnectionManager
+    public class ConnectionManager : IConnectionManager
     {
         ISSDPServer _ssdpServer;
         IWebServer _webServer;
-        Server _tcpServer;
-
-        ITankBot _soccerBot;
+        IServer _tcpServer;
+        ISensorManager _sensorManager;
         ITankBotLogger _logger;
+        ITankBot _tankBot;
 
-        private string _deviceName;
+        string _tankBotName;
+        int _webServerPort;
+        int _tcpListenerPort;
+        string _deviceName;
 
         static ConnectionManager _instance = new ConnectionManager();
 
@@ -36,8 +39,8 @@ namespace TampaIoT.TankBot.Firmware.Managers
 <h1>" + _deviceName + @" Soccer Bot Api Page</h1>
 <h2>Tampa IoT Society</h2> 
 <h2>Status: " + message + @"</h2> 
-<h3>API Mode: " + _soccerBot.APIMode + @"</h3>
-<h3>Firmware Version: " + _soccerBot.FirmwareVersion + @" </h3>
+<h3>API Mode: " + _tankBot.APIMode + @"</h3>
+<h3>Firmware Version: " + _tankBot.FirmwareVersion + @" </h3>
 <img src='https://raw.githubusercontent.com/bytemaster-0xff/WinIoTSoccerBot/master/Documentation/BasicVersion.jpg' />
 <div class='row'>
 <div class='col-md-1'><a class='btn btn-success' href='/reset' >Reset</a></div>
@@ -55,7 +58,7 @@ namespace TampaIoT.TankBot.Firmware.Managers
         }
 
 
-        private ConnectionManager()
+        public ConnectionManager()
         {
             Windows.Networking.Connectivity.NetworkInformation.NetworkStatusChanged += NetworkInformation_NetworkStatusChanged;
         }
@@ -79,13 +82,8 @@ namespace TampaIoT.TankBot.Firmware.Managers
             }
         }
 
-        private string _tankBotName;
-        private ITankBot _tankBot;
-        private SensorManager _sensorManager;
-        private int _webServerPort;
-        private int _tcpListenerPort;
 
-        public void Start(String tankBotName, ITankBot tankBot, ITankBotLogger logger, SensorManager sensorManager, int webServerPort, int tcpListenerPort)
+        public void Start(String tankBotName, ITankBot tankBot, ITankBotLogger logger, ISensorManager sensorManager, int webServerPort, int tcpListenerPort)
         {
             _logger = logger;
             _tankBotName = tankBotName;
@@ -104,10 +102,8 @@ namespace TampaIoT.TankBot.Firmware.Managers
                 StartTCPServer(_tcpListenerPort, _tankBot, _sensorManager);
             }
         }
-
-        public static ConnectionManager Instance { get { return _instance; } }
-
-        public void MakeDiscoverable(string name)
+        
+        private void MakeDiscoverable(string name)
         {
             var _configuration = new UPNPConfiguration()
             {
@@ -130,23 +126,28 @@ namespace TampaIoT.TankBot.Firmware.Managers
             _ssdpServer.MakeDiscoverable(9500, _configuration);
         }
 
-        public void StartWebServer(int port, string name)
+        private void StartWebServer(int port, string name)
         {
             _deviceName = name;
 
             _webServer = NetworkServices.GetWebServer();
-            _webServer.RegisterAPIHandler(new MotionRestAPI(_soccerBot, _logger));
-            _webServer.RegisterAPIHandler(new MotionController(_soccerBot, _logger));
+            _webServer.RegisterAPIHandler(new MotionRestAPI(_tankBot, _logger));
+            _webServer.RegisterAPIHandler(new MotionController(this, _logger));
             _webServer.DefaultPageHtml = GetDefaultPageHTML("Ready");
             _webServer.StartServer(port);
         }
 
-        public void StartTCPServer(int port, ITankBot soccerBot, SensorManager sensorManager)
+        private void StartTCPServer(int port, ITankBot soccerBot, ISensorManager sensorManager)
         {
-            _tcpServer = new Channels.Server(_logger, port, soccerBot, sensorManager);
+            _tcpServer = new Server(_logger, port, soccerBot, sensorManager);
             _tcpServer.Start();
         }
 
-        public Channels.Server TCPIPServer { get { return _tcpServer; } }
+        public IEnumerable<IClient> Clients { get { return _tcpServer.Clients.Values; } }
+
+
+        public ITankBot TankBot { get { return _tankBot; } }
+        public ISensorManager SensorManager { get { return _sensorManager; } }
+
     }
 }
