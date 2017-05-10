@@ -5,7 +5,7 @@ using Windows.Devices.Gpio;
 
 namespace TampaIoT.TankBot.Firmware.Sensors
 {
-    public class IRProximitySensor : ISensor
+    public class IRProximitySensor : SensorBase, ISensor
     {
         GpioPin _input;
 
@@ -16,27 +16,13 @@ namespace TampaIoT.TankBot.Firmware.Sensors
             Value = "?";
         }
 
-        public string Value { get; set; }
-
-        public DateTime? LastUpdated { get; private set; }
-
-        public bool IsOnline { get; private set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public void Read()
         {
             if (_input != null)
             {
 
-                if (_input.Read() == GpioPinValue.High)
-                {
-                    Value = "Off";
-                }
-                else
-                {
-                    Value = "On";
-                }
+                Value = (_input.Read() == GpioPinValue.High) ? "Off" : "On";
 
                 LastUpdated = DateTime.Now;
                 IsOnline = true;

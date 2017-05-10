@@ -13,7 +13,7 @@ namespace TampaIoT.TankBot.App.ViewModels
     public interface IClientTankBotViewModel
     {
         short Speed { get; set; }
-        void Disconnect();
+        Task DisconnectAsync();
         SensorData SensorData { get; }
         RelayCommand MoveCommand { get;  }
         RelayCommand StopCommand { get; }

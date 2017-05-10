@@ -1,12 +1,6 @@
 ﻿using LagoVista.Core.Models.Drawing;
-using LagoVista.Core.PlatformSupport;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TampaIoT.TankBot.Core.Interfaces;
@@ -17,18 +11,8 @@ using Windows.Devices.I2c;
 
 namespace TampaIoT.TankBot.Firmware.Sensors
 {
-    public class Compass5983 : ISensor
+    public class Compass5983 : SensorBase, ISensor
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void RaisePropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            //TODO: Should be a design time check and not run this.
-            Services.DispatcherServices.Invoke(() =>
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName))
-            );
-        }
-
-
         private I2cDevice _compassSensor;
         Timer _timer;
 
@@ -56,6 +40,20 @@ namespace TampaIoT.TankBot.Firmware.Sensors
         const byte HMC5983_TEMP_OUT_LSB = 0x32;
 
         MedianFilter _medianFilter;
+
+        bool _isCalibrating;
+        bool _calibrated;
+        double _minX;
+        double _maxX;
+        double _minY;
+        double _maxY;
+
+        const string CALIBRATED = "CALIBRATED";
+
+        const string MINX = "MINX";
+        const string MINY = "MAXY";
+        const string MAXX = "MAXX";
+        const string MAXY = "MAXY";
 
         public async Task InitAsync()
         {
@@ -88,6 +86,13 @@ namespace TampaIoT.TankBot.Firmware.Sensors
 
         public void Start()
         {
+            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+            _calibrated = localSettings.Values.ContainsKey(CALIBRATED);
+            _minX = localSettings.Values.ContainsKey(MINX) ? Convert.ToDouble(localSettings.Values[MINX]) : 9999;
+            _minY = localSettings.Values.ContainsKey(MINY) ? Convert.ToDouble(localSettings.Values[MINY]) : 9999;
+            _maxX = localSettings.Values.ContainsKey(MAXX) ? Convert.ToDouble(localSettings.Values[MAXX]) : -9999;
+            _maxY = localSettings.Values.ContainsKey(MAXY) ? Convert.ToDouble(localSettings.Values[MAXY]) : -9999;
+
             if (_timer == null)
             {
                 _timer = new Timer(Read, null, 0, 250);
@@ -122,17 +127,19 @@ namespace TampaIoT.TankBot.Firmware.Sensors
                 var inBuffer = new byte[6];
                 _compassSensor.WriteRead(new byte[1] { HMC5983_OUT_X_MSB }, inBuffer);
 
-    //            var hX = BitConverter.ToInt16(inBuffer, 0);
-  //              var hZ = BitConverter.ToInt16(inBuffer, 2);
-//                var hY = BitConverter.ToInt16(inBuffer, 4);
-
-
                 var hX = (Int16)(inBuffer[0] << 8 | inBuffer[1]);
                 var hZ = (Int16)(inBuffer[2] << 8 | inBuffer[3]);
                 var hY = (Int16)(inBuffer[4] << 8 | inBuffer[5]);
 
-                _medianFilter.Add(new Point2D<int>(hX, hY));
+                if(_isCalibrating)
+                {
+                    if (hX < _minX) _minX = hX;
+                    if (hX > _maxX) _maxX = hX;
+                    if (hY < _minY) _minY = hY;
+                    if (hY > _minY) _maxY = hY;
+                }
 
+                _medianFilter.Add(new Point2D<int>(hX, hY));
                 
                 var radians = Math.Atan2(_medianFilter.Filtered.X, _medianFilter.Filtered.Y);
                 var angle = radians * (180 / Math.PI);
@@ -161,35 +168,15 @@ namespace TampaIoT.TankBot.Firmware.Sensors
                 IsOnline = false;
             }
         }
-
-        private bool _isOnline = false;
-        public bool IsOnline
+        
+        public void BeginCalibration()
         {
-            get { return _isOnline; }
-            set
-            {
-                _isOnline = value;
-                RaisePropertyChanged();
-            }
+            _isCalibrating = true;
         }
 
-
-        public DateTime? LastUpdated
+        public void EndCalibration()
         {
-            get; private set;
-        }
-
-        private string _value;
-        public string Value
-        {
-            get { return _value; }
-            set
-            {
-                _value = value;
-                LastUpdated = DateTime.Now;
-                RaisePropertyChanged();
-                RaisePropertyChanged(nameof(LastUpdated));
-            }
+            _isCalibrating = true;
         }
 
         public void Dispose()

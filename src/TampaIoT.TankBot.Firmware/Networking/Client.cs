@@ -10,7 +10,7 @@ using TampaIoT.TankBot.Core.Messages;
 
 namespace TampaIoT.TankBot.Firmware.Networking
 {
-    public class Client : IDisposable
+    public class Client : IDisposable, IClient
     {
         public event EventHandler<NetworkMessage> MessageRecevied;
 
@@ -29,9 +29,12 @@ namespace TampaIoT.TankBot.Firmware.Networking
         DateTime _lastMessageDateStamp;
         ITankBotLogger _logger;
         MessageParser _parser;
+        string _id;
 
         private Client(StreamSocket socket, ITankBotLogger logger)
         {
+            _id = Guid.NewGuid().ToString();
+
             _socket = socket;
             _logger = logger;
             _parser = new MessageParser();
@@ -65,7 +68,7 @@ namespace TampaIoT.TankBot.Firmware.Networking
             
         }
 
-        public static Client Create(StreamSocket socket, ITankBotLogger logger)
+        public static IClient Create(StreamSocket socket, ITankBotLogger logger)
         {
             return new Client(socket, logger);
         }
@@ -131,6 +134,8 @@ namespace TampaIoT.TankBot.Firmware.Networking
             }
         }
 
+        public string Id { get { return _id; } }
+        
         public void Dispose()
         {
             lock (this)

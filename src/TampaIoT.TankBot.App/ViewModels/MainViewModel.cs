@@ -16,7 +16,6 @@ namespace TampaIoT.TankBot.App.ViewModels
         {
             TogglePaneVisibilityCommand = new RelayCommand(TagglePaneVisibility);
             SearchVM = new SearchTankBotViewModel();
-            
         }
 
         private async void ConnectTankBotAsync(IChannel channel)
@@ -27,24 +26,29 @@ namespace TampaIoT.TankBot.App.ViewModels
                 {
                     IsPaneOpen = false;
                 }
+                
+                switch(channel.ChannelType)
+                {
+                    case ChannelTypes.Local: ClientTankBotViewModel = new LocalClientTankBotViewModel(channel, TankBotLogger, App.TheApp.JoyStick); break;
+                    case ChannelTypes.Simulated:
+                    case ChannelTypes.Remote: ClientTankBotViewModel = new LocalClientTankBotViewModel(channel, TankBotLogger, App.TheApp.JoyStick); break;
+                }
             }
         }
 
         public ITankBotLogger TankBotLogger { get { return App.TheApp.Logger; } }
+
         IChannel _currentChannel;
         public IChannel CurrentChannel
         {
             get { return _currentChannel; }
-            set { ConnectTankBotAsync(value); }
+            set
+            {
+                Set(ref _currentChannel, value);
+                ConnectTankBotAsync(value);
+            }
         }
-
-        private ITankBot _tankBot;
-        public ITankBot TankBot
-        {
-            get { return _tankBot;}
-            set{ Set(ref _tankBot, value);}
-        }
-
+     
         public void TagglePaneVisibility()
         {
             IsPaneOpen = !IsPaneOpen;
@@ -58,9 +62,7 @@ namespace TampaIoT.TankBot.App.ViewModels
                 SearchVM.AvailableChannels.Clear();
             }
         }
-
-        public RelayCommand TogglePaneVisibilityCommand { get; private set; }
-
+        
         private bool _isPaneOpen = false;
         public bool IsPaneOpen
         {
@@ -80,5 +82,6 @@ namespace TampaIoT.TankBot.App.ViewModels
             get { return _clientTankBotViewModel; }
             set { Set(ref _clientTankBotViewModel, value); }
         }
+        public RelayCommand TogglePaneVisibilityCommand { get; private set; }
     }
 }
