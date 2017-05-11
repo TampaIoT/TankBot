@@ -6,8 +6,7 @@ If the LEDs flash 5 times then turn off for about 2 seconds your TankBot is not 
 
 If the LEDs flash twice then turn off for about 2 seconds your TankBot is not communicating witht he underlying robot platform, check the serial lines between the Windows 10 IoT Core board to the robot platform. [Connecting Windows 10 IoT Core to Robot Platform](SerialConnections.md)
 
-
-If you install the custom Firmware on your mBot your mBot will use it's onboard RGB LEDs to show the status.
+If you install the [Custom Firmware](https://github.com/TampaIoT/TankBot/tree/master/src/mBotFirmware)  on your mBot ([with instuctions found here](https://github.com/TampaIoT/TankBot/blob/master/GettingStarted.md)).  Your mBot will use it's onboard RGB LEDs to show the status.
 - No LEDs or Dim Red: mBot is alive but not connected to Windows 10 IoT Core Firmware
 - Bright Yellow: Windows 10 IoT Core Connected to mBot, waiting for client connection
 - Bright Green: Device Application Connected

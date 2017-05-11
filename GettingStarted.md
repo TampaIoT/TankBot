@@ -4,7 +4,12 @@
 
 ### Software Requirements
 
-[Visual Studio 2015](https://www.microsoftstore.com/store/msusa/en_US/cat/Visual-Studio-2015/categoryID.69407500?s_kwcid=AL!4249!10!13675262506!84040865656&ef_id=WA5uGgAABWJOSWR6:20170130221540:s)
+NOTE: Current release Requires [Visual Studio 2017](https://www.visualstudio.com/downloads/) and Windows SDK 15063 https://www.visualstudio.com/downloads/
+
+~~[Visual Studio 2015](https://www.microsoftstore.com/store/msusa/en_US/cat/Visual-Studio-2015/categoryID.69407500?s_kwcid=AL!4249!10!13675262506!84040865656&ef_id=WA5uGgAABWJOSWR6:20170130221540:s)~~
+
+We may provide support for older versions of Visual Studio, but likely will require Windows SDK 15063.
+
 Make sure when you install Visual Studio, you install support for building UWP/Windows Store apps.  The minimum [Windows SDK](https://developer.microsoft.com/en-US/windows/downloads/windows-10-sdk) we support is 14393
 
 
