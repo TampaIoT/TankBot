@@ -19,4 +19,4 @@ Releases are Located in the [Firmeware Folder](https://github.com/TampaIoT/TankB
 
 3) You will need to install the primary Application File from the Version Directory And then upload all the dependencies as in:
 
-![Alt](Documentation/SideLoadDependencies.jpg)
+![Alt](Documentation/SideLoadDependencies.JPG)
