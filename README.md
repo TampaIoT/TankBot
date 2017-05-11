@@ -1,7 +1,6 @@
-# Windows 10 IoT Core - ~~Soccer~~ Laser Tank Bot
+# Windows 10 IoT Core - Laser TankBot
 ## [Tampa IoT Society](https://www.meetup.com/Tampa-Bay-NET-Microframeworks-Developer-Group)
 
-BREAKING NEWS: As of the last meeting we decided to change our sport from Soccer to Laser Battle Tanks...no our lasers won't burn up the enemy but will "light-them-up"!
 
 ![Alt](Documentation/mBot.png)
 
