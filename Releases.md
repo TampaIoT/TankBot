@@ -13,7 +13,7 @@
 ### Windows 10 IoT Core Application
 
 1) Open the Windows 10 IoT Device Portal
-![Alt](Documentation/IOTPortal.jpg)
+![Alt](Documentation/IOTPortal.JPG)
 
 2) Either pull the latest file or download the App Firmware and Dependencies
 Releases are Located in the [Firmewrare Folder](https://github.com/tampaiot/tankbot/releases/firmware)
