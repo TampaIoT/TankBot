@@ -81,17 +81,17 @@ namespace TampaIoT.TankBot.Firmware.Managers
 
         private void NetworkInformation_NetworkStatusChanged(object sender)
         {
-            var temp = Windows.Networking.Connectivity.NetworkInformation.GetInternetConnectionProfile();
+            var networkInfo = Windows.Networking.Connectivity.NetworkInformation.GetInternetConnectionProfile();
             var previousInternetConnectionStatus = App.TheApp.HasInternetConnection;
-            App.TheApp.HasInternetConnection = temp.GetNetworkConnectivityLevel() == Windows.Networking.Connectivity.NetworkConnectivityLevel.InternetAccess;
+            App.TheApp.HasInternetConnection = networkInfo.GetNetworkConnectivityLevel() == Windows.Networking.Connectivity.NetworkConnectivityLevel.InternetAccess;
 
-            if (App.TheApp.HasInternetConnection)
+            if (App.TheApp.HasInternetConnection && !previousInternetConnectionStatus)
             {
                 MakeDiscoverable(_tankBotName);
                 StartWebServer(_webServerPort, _tankBotName);
                 StartTCPServer(_tcpListenerPort, _tankBot, _sensorManager);
             }
-            else
+            else if (!App.TheApp.HasInternetConnection)
             {
                 if (Server != null)
                 {
@@ -123,7 +123,7 @@ namespace TampaIoT.TankBot.Firmware.Managers
                 StartTCPServer(_tcpListenerPort, _tankBot, _sensorManager);
             }
         }
-        
+
         private void MakeDiscoverable(string name)
         {
             if (_ssdpServer == null)
@@ -150,7 +150,7 @@ namespace TampaIoT.TankBot.Firmware.Managers
                     _ssdpServer = NetworkServices.GetSSDPServer();
                     _ssdpServer.MakeDiscoverable(9500, _configuration);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.NotifyUserError("ConnectionManager_MakeDiscoverable", ex.Message);
                 }
@@ -169,7 +169,7 @@ namespace TampaIoT.TankBot.Firmware.Managers
                 _webServer.DefaultPageHtml = GetDefaultPageHTML("Ready");
                 _webServer.StartServer(port);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.NotifyUserError("ConnectionManager_StartWebServer", ex.Message);
             }
@@ -182,7 +182,7 @@ namespace TampaIoT.TankBot.Firmware.Managers
                 Server = new Server(_logger, port, soccerBot, sensorManager);
                 Server.Start();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.NotifyUserError("ConnectionManager_StartTCPServer", ex.Message);
             }
@@ -199,7 +199,7 @@ namespace TampaIoT.TankBot.Firmware.Managers
             }
         }
 
-        public IEnumerable<IClient> Clients { get { return Server != null ? Server.Clients.Values : new List<IClient>() ; } }
+        public IEnumerable<IClient> Clients { get { return Server != null ? Server.Clients.Values : new List<IClient>(); } }
 
         public ITankBot TankBot { get { return _tankBot; } }
         public ISensorManager SensorManager { get { return _sensorManager; } }

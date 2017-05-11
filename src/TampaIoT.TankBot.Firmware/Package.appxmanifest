@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" xmlns:uap4="http://schemas.microsoft.com/appx/manifest/uap/windows10/4" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp rescap uap4">
-  <Identity Name="SoftwareLogisticsLLC.TankBotFirmware" Publisher="CN=610EF21F-3A3C-4783-B4BF-B7C267BC0CA0" Version="1.1.2.0" />
+  <Identity Name="SoftwareLogisticsLLC.TankBotFirmware" Publisher="CN=610EF21F-3A3C-4783-B4BF-B7C267BC0CA0" Version="0.5.3.0" />
   <mp:PhoneIdentity PhoneProductId="3bbbad46-1e0c-49f1-aa92-33df6bc5b6c8" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>TankBot Firmware</DisplayName>
