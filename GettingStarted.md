@@ -4,13 +4,13 @@
 
 ### Software Requirements
 
-NOTE: Current release Requires [Visual Studio 2017](https://www.visualstudio.com/downloads/) and Windows SDK 15063 https://www.visualstudio.com/downloads/
+NOTE: Current release Requires [Visual Studio 2017](https://www.visualstudio.com/downloads/) and [Windows SDK 15063](https://developer.microsoft.com/en-US/windows/downloads/windows-10-sdk)
 
 ~~[Visual Studio 2015](https://www.microsoftstore.com/store/msusa/en_US/cat/Visual-Studio-2015/categoryID.69407500?s_kwcid=AL!4249!10!13675262506!84040865656&ef_id=WA5uGgAABWJOSWR6:20170130221540:s)~~
 
-We may provide support for older versions of Visual Studio, but likely will require Windows SDK 15063.
+We may provide support for older versions of Visual Studio, but likely will contineu to require Windows SDK 15063.
 
-Make sure when you install Visual Studio, you install support for building UWP/Windows Store apps.  The minimum [Windows SDK](https://developer.microsoft.com/en-US/windows/downloads/windows-10-sdk) we support is 14393
+Make sure when you install Visual Studio, you install support for building UWP/Windows Store apps. 
 
 
 [Arduino](https://www.arduino.com) - Necessary to install [custom Arduino firmware](https://github.com/bytemaster-0xff/WinIoTSoccerBot/tree/master/src/mBotFirmware).  At this time installing custom firmware isn't 100% required bit it will provide better performance and advanved features.
@@ -19,14 +19,9 @@ Make sure when you install Visual Studio, you install support for building UWP/W
 
 
 ### Software Organization
-There are three main programs that make up the client portion of the Soccer Bot Platform
-
-Windows Store App Running on a PC - Used to manually control your SoccerBot
-
-Windows UWP app (Windows 10 IoT Core) running on Raspberry Pi - A small backpack for the robot to provide additional computing power and cloud connectivity
-
-Custom Firmware - Additional features and tuned software to work with the Windows 10 IoT Core app.
-
+* [Design Documents](DesignDocuments.md)
+* [Project Structure](Documentation/ProjectStructure.md)
+* [User Interface Requirements](Documentation/UserInterfaceRequirements.md)
 
 
 ### Installing Firmware on mBot
