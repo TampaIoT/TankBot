@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="221de305-fc15-4adb-a942-f040e6cc76b6" Publisher="CN=kevin" Version="1.0.0.0" />
-  <mp:PhoneIdentity PhoneProductId="221de305-fc15-4adb-a942-f040e6cc76b6" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="SoftwareLogisticsLLC.TankBot" Publisher="CN=610EF21F-3A3C-4783-B4BF-B7C267BC0CA0" Version="1.1.0.0" />
+  <mp:PhoneIdentity PhoneProductId="b79a8be1-f78a-46d9-bf5f-84bd90e4887b" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>TampaIoT.TankBot.App</DisplayName>
-    <PublisherDisplayName>kevin</PublisherDisplayName>
+    <DisplayName>TankBot</DisplayName>
+    <PublisherDisplayName>Software Logistics LLC</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="TampaIoT.TankBot.App.App">
-      <uap:VisualElements DisplayName="TampaIoT.TankBot.App" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="TampaIoT.TankBot.App" BackgroundColor="transparent">
+      <uap:VisualElements DisplayName="TankBot" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="TampaIoT.TankBot.App" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />

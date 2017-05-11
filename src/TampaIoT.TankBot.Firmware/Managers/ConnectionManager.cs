@@ -1,9 +1,12 @@
 ﻿using LagoVista.Core.Networking.Interfaces;
 using LagoVista.Core.Networking.Models;
 using LagoVista.Core.Networking.Services;
+using LagoVista.Core.PlatformSupport;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using TampaIoT.TankBot.Core;
@@ -14,11 +17,10 @@ using TampaIoT.TankBot.Firmware.Sensors;
 
 namespace TampaIoT.TankBot.Firmware.Managers
 {
-    public class ConnectionManager : IConnectionManager
+    public class ConnectionManager : INotifyPropertyChanged, IConnectionManager
     {
         ISSDPServer _ssdpServer;
         IWebServer _webServer;
-        IServer _tcpServer;
         ISensorManager _sensorManager;
         ITankBotLogger _logger;
         ITankBot _tankBot;
@@ -30,6 +32,18 @@ namespace TampaIoT.TankBot.Firmware.Managers
         string _deviceName;
 
         static ConnectionManager _instance = new ConnectionManager();
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            //TODO: Should be a design time check and not run this.
+            Services.DispatcherServices.Invoke(() =>
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName))
+            );
+        }
+
 
         public string GetDefaultPageHTML(string message)
         {
@@ -78,9 +92,12 @@ namespace TampaIoT.TankBot.Firmware.Managers
                 StartTCPServer(_tcpListenerPort, _tankBot, _sensorManager);
             }
             else
-            {                
-                _tcpServer.Stop();
-                _tcpServer = null;
+            {
+                if (Server != null)
+                {
+                    Server.Stop();
+                    Server = null;
+                }
                 //TODO: Need to test dropping and reconnecting with TCP Server and Web Server.
             }
         }
@@ -162,8 +179,8 @@ namespace TampaIoT.TankBot.Firmware.Managers
         {
             try
             {
-                _tcpServer = new Server(_logger, port, soccerBot, sensorManager);
-                _tcpServer.Start();
+                Server = new Server(_logger, port, soccerBot, sensorManager);
+                Server.Start();
             }
             catch(Exception ex)
             {
@@ -171,7 +188,18 @@ namespace TampaIoT.TankBot.Firmware.Managers
             }
         }
 
-        public IEnumerable<IClient> Clients { get { return _tcpServer.Clients.Values; } }
+        IServer _server;
+        public IServer Server
+        {
+            get { return _server; }
+            set
+            {
+                _server = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public IEnumerable<IClient> Clients { get { return Server != null ? Server.Clients.Values : new List<IClient>() ; } }
 
         public ITankBot TankBot { get { return _tankBot; } }
         public ISensorManager SensorManager { get { return _sensorManager; } }

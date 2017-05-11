@@ -60,13 +60,16 @@ namespace TampaIoT.TankBot.Firmware
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            Frame rootFrame = Window.Current.Content as Frame;
+            _connectionManager = new ConnectionManager();
+
+            Frame rootFrame = Window.Current.Content as Frame;            
 
             if (rootFrame == null)
             {
                 rootFrame = new Frame();
+                LagoVista.Core.UWP.Services.UWPDeviceServices.Init(rootFrame.Dispatcher);
                 rootFrame.NavigationFailed += OnNavigationFailed;
-                Window.Current.Content = rootFrame;
+                Window.Current.Content = rootFrame;                
             }
 
             if (e.PrelaunchActivated == false)
@@ -75,9 +78,7 @@ namespace TampaIoT.TankBot.Firmware
                 {
                     rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
-
-                LagoVista.Core.UWP.Services.UWPDeviceServices.Init(rootFrame.Dispatcher);
-
+                
                 InitSockerBot();
 
                 Window.Current.Activate();
@@ -89,7 +90,7 @@ namespace TampaIoT.TankBot.Firmware
             var hostNames = NetworkInformation.GetHostNames();
             var computerName = hostNames.FirstOrDefault(name => name.Type == HostNameType.DomainName)?.DisplayName ?? "???";
 
-            _connectionManager = new ConnectionManager();
+            
 
             var pin = await LagoVista.Core.PlatformSupport.Services.Storage.GetKVPAsync<string>("PIN");
             if (String.IsNullOrEmpty(pin))

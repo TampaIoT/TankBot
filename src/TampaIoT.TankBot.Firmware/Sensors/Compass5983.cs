@@ -1,6 +1,7 @@
 ﻿using LagoVista.Core.Models.Drawing;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using TampaIoT.TankBot.Core.Interfaces;
@@ -95,7 +96,7 @@ namespace TampaIoT.TankBot.Firmware.Sensors
 
             if (_timer == null)
             {
-                _timer = new Timer(Read, null, 0, 250);
+                _timer = new Timer(Read, null, 0, 500);
             }
         }
         public void Stop()
@@ -117,7 +118,27 @@ namespace TampaIoT.TankBot.Firmware.Sensors
                 outBuffer[0] = HMC5983_MODE;
                 outBuffer[1] = 0x01;
                 _compassSensor.Write(outBuffer);
+            }
+            catch(FileNotFoundException)
+            {
+                if (IsOnline)
+                {
+                    _timer.Change(2500, 2500);
+                }
 
+                RawX.IsOnline = false;
+                RawY.IsOnline = false;
+                IsOnline = false;
+                return;
+            }
+
+            if(IsOnline)
+            {
+                _timer.Change(500, 500);
+            }
+
+            try
+            { 
                 /* Wait for Conversion complete, 10ms should be plenty */
                 await Task.Delay(20);
 
@@ -156,15 +177,11 @@ namespace TampaIoT.TankBot.Firmware.Sensors
                 RawX.IsOnline = true;
                 RawY.Value = hY.ToString();
                 RawY.IsOnline = true;
-
-                //Debug.WriteLine($"Angle={Value}");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.Message);
                 RawX.IsOnline = false;
                 RawY.IsOnline = false;
-                Debug.WriteLine("Compass Offline: " + Value.ToString());
                 IsOnline = false;
             }
         }

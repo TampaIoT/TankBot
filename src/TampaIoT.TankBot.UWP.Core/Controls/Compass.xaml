@@ -11,12 +11,14 @@
     d:DesignWidth="300">
 
     <Grid>
-        <fa:FontAwesome Width="128" Height="128"
-                        
-                        Icon="ArrowUp" FontSize="64" Foreground="Blue" >
+        <fa:FontAwesome Width="128" Height="128" Icon="ArrowUp" FontSize="64" Foreground="Blue" >
             <fa:FontAwesome.RenderTransform>
                 <RotateTransform Angle="45" CenterX="64" CenterY="64" />
             </fa:FontAwesome.RenderTransform>
         </fa:FontAwesome>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Compass" FontSize="16" Foreground="Red" TextAlignment="Center" />
+            <TextBlock Text="Coming Soon!" FontSize="16" Foreground="Red" TextAlignment="Center" />
+        </StackPanel>
     </Grid>
 </UserControl>

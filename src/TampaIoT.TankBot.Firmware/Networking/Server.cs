@@ -9,10 +9,13 @@ using TampaIoT.TankBot.Core.Models;
 using TampaIoT.TankBot.Core.Messages;
 using System.Collections.Concurrent;
 using System.Threading;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using LagoVista.Core.PlatformSupport;
 
 namespace TampaIoT.TankBot.Firmware.Networking
 {
-    public class Server : IServer
+    public class Server : IServer, INotifyPropertyChanged
     {
         ITankBotLogger _logger;
         ITankBot _tankBot;
@@ -26,6 +29,15 @@ namespace TampaIoT.TankBot.Firmware.Networking
 
         Object _clientAccessLocker = new object();
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            //TODO: Should be a design time check and not run this.
+            Services.DispatcherServices.Invoke(() =>
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName))
+            );
+        }
 
         public Server(ITankBotLogger logger, int port, ITankBot soccerBot, ISensorManager sensorManager)
         {
@@ -64,12 +76,24 @@ namespace TampaIoT.TankBot.Firmware.Networking
             _clients.Clear();
         }
 
+        SensorData _sensorData;
+        public SensorData SensorData
+        {
+            get { return _sensorData; }
+            set
+            {
+                _sensorData = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         private async void _sensorUpdateTimer_Tick(object sender)
         {
             if (_tankBot.LastBotContact.HasValue)
             {
                 var delta = DateTime.Now - _tankBot.LastBotContact.Value;
-                App.TheApp.HasMBotConnection = delta.TotalSeconds < 5;                
+                App.TheApp.HasMBotConnection = delta.TotalSeconds < 5;
             }
             else
                 App.TheApp.HasMBotConnection = false;
@@ -79,10 +103,12 @@ namespace TampaIoT.TankBot.Firmware.Networking
                 Version = _tankBot.FirmwareVersion,
                 DeviceName = _tankBot.DeviceName,
                 MBotConnected = App.TheApp.HasMBotConnection,
-                FrontSonar = new Sensor() {  Value = _tankBot.FrontSonar.ToString() }               
+                FrontSonar = new Sensor() { Value = _tankBot.FrontSonar.ToString() }
             };
-           
+
             _sensorManager.UpdateSensorData(sensorMessage);
+
+            SensorData = sensorMessage;
 
             var msg = NetworkMessage.CreateJSONMessage(sensorMessage, Core.Messages.SensorData.MessageTypeId);
             var connectedClients = _clients.Where(clnt => clnt.Value.IsConnected == true).ToList();
@@ -137,12 +163,12 @@ namespace TampaIoT.TankBot.Firmware.Networking
                 var client = Client.Create(socket, _logger);
                 client.MessageRecevied += Client_MessageRecevied;
                 int attempts = 0;
-                while(!_clients.TryAdd(client.Id,client) && attempts++ < 5)
+                while (!_clients.TryAdd(client.Id, client) && attempts++ < 5)
                 {
                     SpinWait.SpinUntil(() => false, 5);
                 }
 
-                if(attempts == 5)
+                if (attempts == 5)
                 {
                     _logger.NotifyUserError("Server_ClientConnected", "Could not add client after 5 attempts.");
                 }

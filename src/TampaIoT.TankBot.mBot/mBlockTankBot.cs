@@ -412,7 +412,7 @@ namespace TampaIoT.TankBot
 
         public void Stop()
         {
-
+            Move(0);
         }
 
         public RelayCommand ModeACommand { get; private set; }

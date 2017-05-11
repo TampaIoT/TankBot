@@ -35,7 +35,19 @@ namespace TampaIoT.TankBot.Firmware.Sensors
 
         public DateTime? LastUpdated { get; protected set; }
 
-        public bool IsOnline { get; protected set; }
+        private bool _isOnline = false;
+        public bool IsOnline
+        {
+            get { return _isOnline; }
+            set
+            {
+                if (_isOnline != value)
+                {
+                    _isOnline = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
     }
 }

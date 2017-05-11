@@ -31,7 +31,7 @@ namespace TampaIoT.TankBot.Firmware.Filters
         public void Add(Point2D<int> point)
         {
             _points[_head++] = point;
-            if (_head == _filterSize)
+            if (_head >= _filterSize)
             {
                 _head = 0;
             }

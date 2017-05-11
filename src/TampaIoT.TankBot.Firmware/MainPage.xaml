@@ -1,13 +1,34 @@
-﻿<Page
+﻿<Page xmlns:my1="using:TampaIoT.TankBot.Firmware.Controls"  xmlns:my="using:TampaIoT.TankBot.UWP.Core.Controls" 
     x:Class="TampaIoT.TankBot.Firmware.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:TampaIoT.TankBot.Firmware"
+    xmlns:cvts="TampaIoT.TankBot.Firmware.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.Resources>
+           
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="auto"  />
+        </Grid.ColumnDefinitions>
+        <my:Movement Grid.Column="1"  />
+        
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center">
+            <my1:SensorArray Grid.Row="1" DataContext="{Binding Path=ConnectionManager.Server.SensorData}" />
+            <my:Compass Grid.Column="1" Grid.Row="1" DataContext="{Binding Path=ConnectionManager.Server.SensorData}" />
+            <my:Sonar Grid.Column="2" Grid.Row="1" Width="150" Height="150" DataContext="{Binding Path=ConnectionManager.Server.SensorData}" />
+        </StackPanel>
 
+        <my1:SystemStatus Grid.RowSpan="2" Grid.Column="2"/>
     </Grid>
 </Page>

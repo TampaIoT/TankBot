@@ -10,6 +10,7 @@ namespace TampaIoT.TankBot.Firmware.Managers
         string GetDefaultPageHTML(string message);
         void Start(string tankBotName, ITankBot tankBot, ITankBotLogger logger, ISensorManager sensorManager, int webServerPort, int tcpListenerPort, int uPnPListenPort);
 
+        IServer Server { get; }
         ITankBot TankBot { get; }
         ISensorManager SensorManager { get; }
         IEnumerable<IClient> Clients { get; }

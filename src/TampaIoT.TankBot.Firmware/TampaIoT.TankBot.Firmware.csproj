@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TampaIoT.TankBot.Firmware</RootNamespace>
     <AssemblyName>TampaIoT.TankBot.Firmware</AssemblyName>
-    <DefaultLanguage>en</DefaultLanguage>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.15063.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
@@ -17,7 +17,11 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
-    <PackageCertificateKeyFile>TampaIoT.TankBot.Firmware_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>TampaIoT.TankBot.Firmware_StoreKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>E2ABBDB34622BB283CDE7EA55C995200291AAD5F</PackageCertificateThumbprint>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>arm</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -97,6 +101,13 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SensorArray.xaml.cs">
+      <DependentUpon>SensorArray.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SystemStatus.xaml.cs">
+      <DependentUpon>SystemStatus.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\VisibilityConverter.cs" />
     <Compile Include="Filters\MedianFilter.cs" />
     <Compile Include="Loggers\DebugLogger.cs" />
     <Compile Include="MainPage.xaml.cs">
@@ -125,9 +136,10 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="TampaIoT.TankBot.Firmware_TemporaryKey.pfx" />
+    <None Include="TampaIoT.TankBot.Firmware_StoreKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -142,12 +154,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\SensorArray.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SystemStatus.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FontAwesome.UWP">
+      <Version>4.7.0.9</Version>
+    </PackageReference>
     <PackageReference Include="LagoVista.Core">
       <Version>0.8.154-alpha00582</Version>
     </PackageReference>

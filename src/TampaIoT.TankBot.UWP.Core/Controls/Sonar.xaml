@@ -14,6 +14,12 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
+        
         <ProgressBar Height="36" Value="50" Minimum="0" Maximum="200" Grid.Row="0" />
+
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="Sonar" FontSize="16" TextAlignment="Center" Foreground="Red"/>
+            <TextBlock Text="Coming Soon!" FontSize="16" TextAlignment="Center" Foreground="Red"/>
+        </StackPanel>
     </Grid>
 </UserControl>

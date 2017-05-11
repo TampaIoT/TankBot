@@ -14,7 +14,6 @@
         <cvts:IRColorConverter x:Key="IRColorConverter" />
     </UserControl.Resources>
     <Grid>
-        
         <Grid.Resources>
             <Style TargetType="fa:FontAwesome">
                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -22,7 +21,6 @@
                 <Setter Property="Width" Value="64" />
                 <Setter Property="Height" Value="64" />
                 <Setter Property="Foreground" Value="Green" />
-
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>

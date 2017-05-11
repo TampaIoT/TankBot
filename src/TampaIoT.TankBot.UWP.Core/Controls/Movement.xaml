@@ -7,7 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:fa="using:FontAwesome.UWP"
      mc:Ignorable="d"
-    d:DesignHeight="300"
+    Width="250" Height="300"
+    d:DesignHeight="350"
     d:DesignWidth="300">
 
 
@@ -28,6 +29,7 @@
             <RowDefinition Height="33*" />
             <RowDefinition Height="33*" />
             <RowDefinition Height="33*" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="33*" />
@@ -58,7 +60,7 @@
                 <fa:FontAwesome FontSize="48"  Icon="ArrowCircleUp"/>
             </Button.Content>
         </Button>
-        <Button Grid.Column="1" Grid.Row="1" Command="{Binding MoveCommand}" CommandParameter="Stop" >
+        <Button Grid.Column="1" Grid.Row="1" Command="{Binding StopCommand}" >
             <Button.Content>
                 <fa:FontAwesome FontSize="48"    Icon="StopCircleOutline"/>
             </Button.Content>
@@ -89,5 +91,16 @@
                 <RotateTransform Angle="45" CenterX="32" CenterY="32" />
             </Button.RenderTransform>
         </Button>
+        <Grid Grid.Row="3" Grid.ColumnSpan="3" Height="50" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="80" />
+            </Grid.ColumnDefinitions>
+            <Slider Value="{Binding Speed, Mode=TwoWay}" Margin="4" />
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" >
+                <TextBlock Text="Speed" TextAlignment="Center" />
+                <TextBlock Text="{Binding Speed, FallbackValue=100}" TextAlignment="Center" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

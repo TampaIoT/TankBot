@@ -1,61 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-
-<Package
-  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
-  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
-  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-  xmlns:uap4="http://schemas.microsoft.com/appx/manifest/uap/windows10/4"  
-  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-  IgnorableNamespaces="uap mp rescap uap4">
-
-  <Identity
-    Name="dc8d16ae-4b36-4d7e-a351-11bdbfc7a7c1"
-    Publisher="CN=kevin"
-    Version="1.0.0.0" />
-
-  <mp:PhoneIdentity PhoneProductId="dc8d16ae-4b36-4d7e-a351-11bdbfc7a7c1" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
-
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities" xmlns:uap4="http://schemas.microsoft.com/appx/manifest/uap/windows10/4" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp rescap uap4">
+  <Identity Name="SoftwareLogisticsLLC.TankBotFirmware" Publisher="CN=610EF21F-3A3C-4783-B4BF-B7C267BC0CA0" Version="1.1.2.0" />
+  <mp:PhoneIdentity PhoneProductId="3bbbad46-1e0c-49f1-aa92-33df6bc5b6c8" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>TampaIoT.TankBot.Firmware</DisplayName>
-    <PublisherDisplayName>kevin</PublisherDisplayName>
+    <DisplayName>TankBot Firmware</DisplayName>
+    <PublisherDisplayName>Software Logistics LLC</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
-
   <Dependencies>
     <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
   </Dependencies>
-
   <Resources>
-    <Resource Language="x-generate"/>
+    <Resource Language="x-generate" />
   </Resources>
-
   <Applications>
-    <Application Id="App"
-      Executable="$targetnametoken$.exe"
-      EntryPoint="TampaIoT.TankBot.Firmware.App">
-      <uap:VisualElements
-        DisplayName="TampaIoT.TankBot.Firmware"
-        Square150x150Logo="Assets\Square150x150Logo.png"
-        Square44x44Logo="Assets\Square44x44Logo.png"
-        Description="TampaIoT.TankBot.Firmware"
-        BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
-        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="TampaIoT.TankBot.Firmware.App">
+      <uap:VisualElements DisplayName="Tampa IoT TankBot" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="TampaIoT.TankBot.Firmware" BackgroundColor="transparent">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
+        </uap:DefaultTile>
+        <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#007FFF" />
       </uap:VisualElements>
       <Extensions>
         <uap:Extension Category="windows.appService" EntryPoint="TampaIoT.TankBot.Firmware.PortalProvider">
           <uap:AppService Name="com.tampiot.tankbot.portalprovider" />
         </uap:Extension>
         <uap4:Extension Category="windows.devicePortalProvider">
-          <uap4:DevicePortalProvider
-              DisplayName="Tampa IoT Tank Bot"
-              AppServiceName="com.tampiot.tankbot.portalprovider"
-              HandlerRoute="/tampaiottankbot/api/" />
+          <uap4:DevicePortalProvider DisplayName="Tampa IoT Tank Bot" AppServiceName="com.tampiot.tankbot.portalprovider" HandlerRoute="/tampaiottankbot/api/" />
         </uap4:Extension>
       </Extensions>
     </Application>
   </Applications>
-
   <Capabilities>
     <Capability Name="internetClient" />
     <Capability Name="privateNetworkClientServer" />
