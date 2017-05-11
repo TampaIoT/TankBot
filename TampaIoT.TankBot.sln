@@ -13,9 +13,24 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TampaIoT.TankBot.mBot", "sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{1FFDA824-EB5E-4EBD-91E1-F48A2E6BB8EF}"
 	ProjectSection(SolutionItems) = preProject
+		April2017Goals.md = April2017Goals.md
 		CommunicationsChannel.md = CommunicationsChannel.md
+		ConnectWinIoT.md = ConnectWinIoT.md
+		DesignDocuments.md = DesignDocuments.md
+		DesktopApp.md = DesktopApp.md
+		GettingStarted.md = GettingStarted.md
+		HelpWanted.md = HelpWanted.md
+		March2017Goals.md = March2017Goals.md
+		May2017Goals.md = May2017Goals.md
+		mBotInstructions.md = mBotInstructions.md
+		PartsList.md = PartsList.md
 		Documentation\ProjectStructure.md = Documentation\ProjectStructure.md
 		README.md = README.md
+		Releases.md = Releases.md
+		RemoteClient.md = RemoteClient.md
+		SensorBoardV2.md = SensorBoardV2.md
+		SerialConnections.md = SerialConnections.md
+		TroubleShooting.md = TroubleShooting.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TampaIoT.TankBot.UWP.Core", "src\TampaIoT.TankBot.UWP.Core\TampaIoT.TankBot.UWP.Core.csproj", "{865C01FB-EB08-46B6-BF78-F57750BF7CF0}"

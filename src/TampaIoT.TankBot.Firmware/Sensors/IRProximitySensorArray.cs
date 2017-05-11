@@ -74,7 +74,7 @@ namespace TampaIoT.TankBot.Firmware.Sensors
                         }
 
 
-                        await Task.Delay(1500);
+                        await Task.Delay(2000);
 
                     }
                     else if (!App.TheApp.HasMBotConnection)
@@ -92,7 +92,7 @@ namespace TampaIoT.TankBot.Firmware.Sensors
                         _bank1.Write(GpioPinValue.Low);
                         _bank2.Write(GpioPinValue.Low);
 
-                        await Task.Delay(1500);
+                        await Task.Delay(2000);
                     }
                     else 
                     {
