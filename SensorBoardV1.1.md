@@ -21,7 +21,7 @@ There are a number of distinct parts that make up our sensor board
 
 2) 8x IR Sensors
 
-![Alt](Documentation/SensorBoard/IRSensor.jpg)
+![Alt](Documentation/SensorBoard/IRSensorV1.1.jpg)
 
 3) HMC5983 Comppass (attached to I2C Bus)
 
@@ -49,14 +49,11 @@ There are a number of distinct parts that make up our sensor board
 In this step you will be installing 8 IR Sensors on your Sensor Board, these will be used to detect obstacles within a small distance of your bot.
 
 1. Lay the board on a flat surface with the top side facing up.
-1. Locate the 8 IR Sensors, for of them will have the pins facing up and four will have them facing down.
+1. Locate the 8 IR Sensors. Seven of them will have the pins facing up and one will have them facing down.
 1. You will need to bend the pins so they are pointing straight up or down based on the sensor you have, easiest way to do this is to take a small pliers and just bend them, be careful so you don't break them. 
-1. Next take the four IR Sensors with the **pins facing up**, insert them in the holes labeled REARLEFT, LEFT, FRONTLEFT, FRONT.
-
-
-1. Take three of the IR Sensors with the **pins facing down**, turn them over so the components are facing down, and place them in the holes labled RIGHTREAR, RIGHT, FRONTRIGHT.  Your IR Sensors will have the lights facing down.
+1. Next take the Seven IR Sensors with the **pins facing up**, insert them in the holes labeled REARLEFT, LEFT, FRONTLEFT, FRONT, FRONTRIGHT, RIGHT and REARRIGHT.
+1. Take the final IR Sensor with the pins facing down and place it on the top of the board in the REAR slot with the pins facing down.
 1. Once you are confident that the sensor boards are laying flat, solder each of the pins.
-1. Take the final IR Sensor with the pins facing down and place it on the top of the board in the REAR slot with the pins facing down
 1. Solder all the pins to the board.
 
 ![Alt](Documentation/SensorBoard/BentPinPliers.jpg)
