@@ -28,7 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		README.md = README.md
 		Releases.md = Releases.md
 		RemoteClient.md = RemoteClient.md
-		SensorBoardV2.md = SensorBoardV2.md
+		SensorBoardV1.1.md = SensorBoardV1.1.md
 		SerialConnections.md = SerialConnections.md
 		TroubleShooting.md = TroubleShooting.md
 	EndProjectSection
