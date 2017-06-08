@@ -45,8 +45,8 @@ The first thing the app does is requests the version from the mBot.  Our custom 
 ##### [Mar 2017](March2017Goals.md) - Make sure everyone can connect their mBot to Win 10 IoT Core, Compass, XBox Controller, Review Power Options
 ##### [Apr 2017](April2017Goals.md) - Build our Sensor Board and test interactions
 ##### [May 2017](May2017Goals.md) - Azure IoT Talk, Continue Build Sensor Board, Install New Firmware
-##### Jun 2017 - Add Laser Turret and Detection
-##### Jul 2017 - Start Autonmous Testings
-##### Aug 2017 - More Autonmous Testings
+##### [Jun 2017](June2017Goals.md) - Finalize Hardware and Firmware
+##### Jul 2017 - Add Turret and Experiment with "Shoot and Move" algorithms
+##### Aug 2017 - Start Autonmous Testings
 ##### Sep 2017 - Round one!
 ##### Oct 2017 - Show-Off at Tampa Code Camp
