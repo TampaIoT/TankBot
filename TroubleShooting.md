@@ -1,6 +1,6 @@
 # Trouble Shooting
 
-You will know that the Firmware is operaing properly on the TankBot if the LEDs on the sensor board are flashing rapidly, between 5 and 10 times a second for a very samll fraction of a second.
+You will know that the Firmware is operaing properly on the TankBot if the LEDs on the sensor board are flashing rapidly, between 5 and 10 times a second for a very samll fraction of a second.  Some of the sensors have green LEDs and some have red; they serve the same purpose.
 
 If the LEDs flash 5 times then turn off for about 2 seconds your TankBot is not connected to the internet.  Make sure you can connect to your Windows 10 IoT Core devices [Device Portal](https://developer.microsoft.com/en-us/windows/iot/docs/deviceportal). 
 

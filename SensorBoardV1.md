@@ -151,3 +151,9 @@ https://soccerbot.slack.com/team/bytemaster
 ## Step 10 - Inspect Board
 1.  Visually inspect the solder connections you made and make sure there are no shorts
 2.  Optionally connect a meter between the +5V and GND pins on the right angle connector it should not measure 0 Ohms
+
+## Step 11 - Adjust Sensor sensitivity
+1. Connect the sensor board to you Raspberry Pi board using the GPIO header pins.
+2. Power your board.
+3. Wait for Windows IoT core to boot.  If the LEDs are flashing on your IR sensors, then the basic connections are sound.
+4. Adjust the sensitivity of your sensors.  There are two LEDs on each sensor board.  One is a power LED and it's brightness should be constant.  The other LED varies in brightness based on the detected distance to an object. There is a set screw on each board that can adjust the senstivity. With nothing in front of the sensor, adjust the set screw until the LED barely illuminates.  Then place an object directly in front of the sensor and verify that the LED is fully illuminated.
