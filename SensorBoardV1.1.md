@@ -92,8 +92,7 @@ https://soccerbot.slack.com/team/bytemaster
 
 ## Step 6 - Install the Compass
 1. Insert the 7 Pin header connector into the compass board and solder it in place.
-2. Take your side cutters and trim the 7th pin, the one by the hold labled DRDY, this needs to be removed so it will fit in the board.
-3. Place the Compass Board into the Main Board as show below and solder it in place.
+2. Place the Compass Board into the Main Board as show below and solder it in place.
 
 ![Alt](Documentation/SensorBoard/CompassPins.jpg)
 
