@@ -46,7 +46,7 @@ The first thing the app does is requests the version from the mBot.  Our custom 
 ##### [Apr 2017](April2017Goals.md) - Build our Sensor Board and test interactions
 ##### [May 2017](May2017Goals.md) - Azure IoT Talk, Continue Build Sensor Board, Install New Firmware
 ##### [Jun 2017](June2017Goals.md) - Finalize Hardware and Firmware
-##### Jul 2017 - Add Turret and Experiment with "Shoot and Move" algorithms
-##### Aug 2017 - Start Autonmous Testings
-##### Sep 2017 - Round one!
-##### Oct 2017 - Show-Off at Tampa Code Camp
+##### Jul 2017 - OFF
+##### Aug 2017 - OFF
+##### [Sep 2017](Sept2017Goals.md) - Tour of MicroControllers and Sensor Board Catchup
+##### Oct 2017 - TBD

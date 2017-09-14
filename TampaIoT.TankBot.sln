@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.3
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TampaIoT.TankBot.Core", "src\TampaIoT.TankBot.Core\TampaIoT.TankBot.Core.csproj", "{66CA690D-C956-4700-9B53-9505FCC4CDFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TampaIoT.TankBot.Core", "src\TampaIoT.TankBot.Core\TampaIoT.TankBot.Core.csproj", "{66CA690D-C956-4700-9B53-9505FCC4CDFB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TampaIoT.TankBot.Firmware", "src\TampaIoT.TankBot.Firmware\TampaIoT.TankBot.Firmware.csproj", "{5E51C3E9-6725-4F48-A6B3-729C18F08F9A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TampaIoT.TankBot.App", "src\TampaIoT.TankBot.App\TampaIoT.TankBot.App.csproj", "{43AD0FD9-7D9C-45BB-93FC-276072A105F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TampaIoT.TankBot.mBot", "src\TampaIoT.TankBot.mBot\TampaIoT.TankBot.mBot.csproj", "{C4492E42-7814-412E-BB17-D8A84532E3FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TampaIoT.TankBot.mBot", "src\TampaIoT.TankBot.mBot\TampaIoT.TankBot.mBot.csproj", "{C4492E42-7814-412E-BB17-D8A84532E3FA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{1FFDA824-EB5E-4EBD-91E1-F48A2E6BB8EF}"
 	ProjectSection(SolutionItems) = preProject
@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Releases.md = Releases.md
 		RemoteClient.md = RemoteClient.md
 		SensorBoardV1.1.md = SensorBoardV1.1.md
+		Sept2017Goals.md = Sept2017Goals.md
 		SerialConnections.md = SerialConnections.md
 		TroubleShooting.md = TroubleShooting.md
 	EndProjectSection

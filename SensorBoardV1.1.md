@@ -6,8 +6,10 @@ Our Sensor Board will be used to attach 8 proximity sensors, a compass and allow
 1) Sensor PCB Board (Coming Soon)
 1) [IR Sensors](https://www.amazon.com/gp/product/B01I57HIJ0/ref=oh_aui_detailpage_o05_s00?ie=UTF8&psc=1)
 2) [Raspberry Pi Connector](https://www.amazon.com/gp/product/B01IRRCEBK/ref=oh_aui_detailpage_o04_s00?ie=UTF8&psc=1)
-4) [Straight and Right Angle 0.1 Headers](https://www.amazon.com/VAPKER-Headers-Connector-Housing-Connectors/dp/B01FWAV61O/ref=sr_1_7?s=electronics&ie=UTF8&qid=1491391221&sr=1-7&keywords=0.1+inch+header+pins)
+4) [Straight and Right Angle 0.1 Headers](https://www.amazon.com/VAPKER-Headers-Connector-Housing-Connectors/dp/B01FWAV61O/ref=sr_1_7?s=electronics&ie=UTF8&qid=1491391221&sr=1-7&keywords=0.1+inch+header+pins) - This will be a full kit, you can cut these as necessary
 5) [HMC5983 I2C Compass](https://www.amazon.com/UCTRONICS-HMC5983-Temperature-Compensation-3-Axial/dp/B01DILCSP2/ref=sr_1_1?s=electronics&ie=UTF8&qid=1491391265&sr=1-1&keywords=HMC5983)  
+6) [2N2904 Switching Transistors](https://www.amazon.com/600Pcs-Kinds-Values-Transistor-Plastic/dp/B01N2T2WYF/ref=sr_1_fkmr0_1?ie=UTF8&qid=1505407111&sr=8-1-fkmr0&keywords=2n2904+transistor) - Full Kit, select ones labeled 2N2904
+7) [1K Resistor Kit](https://www.amazon.com/gp/product/B06Y5Y76XX/ref=abs_brd_tag_dp?smid=A2CKSJGKIJVSBF) - Find ones labeled 1K or color code  Brown Black Red
 
 ## Schematic
 [Board RevV1](Documentation/BoardSchematicV1.0.png)
